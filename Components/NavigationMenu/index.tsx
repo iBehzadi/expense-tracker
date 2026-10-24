@@ -26,7 +26,7 @@ type SidebarLinkProps = {
   mobile?: boolean;
 };
 
-export default function SidebarLink({
+export default function NavigationMenu({
   mobile = false,
 }: SidebarLinkProps) {
   const pathname = usePathname();

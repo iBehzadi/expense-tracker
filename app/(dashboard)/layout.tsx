@@ -1,7 +1,7 @@
 import React from "react";
 import DashboardNavbar from "@/Components/DashboardNavbar";
 
-import NavLink from "@/Components/NavLink";
+import NavigationMenu from "@/Components/NavigationMenu";
 
 
 export default function DashboardLayout({
@@ -15,7 +15,7 @@ export default function DashboardLayout({
         {/* Desktop Sidebar */}
         <aside className="hidden min-h-[calc(100vh-3.5rem)] w-64 shrink-0 border-l border-gray-200 bg-white p-4 md:flex md:flex-col dark:border-gray-700 dark:bg-gray-900">
           <nav className="flex flex-col gap-2">
-            <NavLink />
+            <NavigationMenu />
           </nav>
         </aside>
 
@@ -25,7 +25,7 @@ export default function DashboardLayout({
 
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-gray-200 bg-white px-1 md:hidden dark:border-gray-700 dark:bg-gray-900">
-        <NavLink mobile />
+        <NavigationMenu mobile />
       </nav>
     </div>
   );
