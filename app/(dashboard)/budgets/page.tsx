@@ -1,7 +1,11 @@
-import React from 'react'
 
-export default function budgets() {
+import React from "react";
+
+export default async function Budgets() {
+
   return (
-    <div>budgets</div>
-  )
+    <div>
+      budgets 
+    </div>
+  );
 }
