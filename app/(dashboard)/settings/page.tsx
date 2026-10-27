@@ -1,7 +1,11 @@
-import React from 'react'
+import React from "react";
 
+import LogoutButton from "@/Components/ui/logOutButton";
 export default function settings() {
   return (
-    <div>settings</div>
-  )
+    <div>
+      <h1>تنظیمات</h1>
+      <LogoutButton />
+    </div>
+  );
 }

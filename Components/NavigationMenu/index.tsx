@@ -8,6 +8,7 @@ import { CiSettings } from "react-icons/ci";
 import { GoGoal } from "react-icons/go";
 import type { IconType } from "react-icons";
 
+
 type NavItem = {
   title: string;
   path: string;
@@ -20,15 +21,14 @@ const navItems: NavItem[] = [
   { title: "بودجه", path: "/budgets", icon: GoGoal },
   { title: "گزارش‌ها", path: "/reports", icon: BiChart },
   { title: "تنظیمات", path: "/settings", icon: CiSettings },
+  
 ];
 
-type SidebarLinkProps = {
+type NavigationMenuProps = {
   mobile?: boolean;
 };
 
-export default function NavigationMenu({
-  mobile = false,
-}: SidebarLinkProps) {
+export default function NavigationMenu({mobile = false,}: NavigationMenuProps) {
   const pathname = usePathname();
 
   return (
