@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "../../../../lib/prisma";
 import { createSession } from "../../../../lib/api/auth";
 
+//اعتبارسنجی
 const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(254),
   password: z.string().min(1).max(72),
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
     );
   }
 
+  //بررسی وجود کاربر در دیتابیس
   try {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -51,10 +53,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const passwordIsValid = await compare(
-      password,
-      user.passwordHash,
-    );
+    const passwordIsValid = await compare(password, user.passwordHash);
 
     if (!passwordIsValid) {
       return NextResponse.json(

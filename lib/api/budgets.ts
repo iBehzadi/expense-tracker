@@ -5,6 +5,7 @@ export type Budget = {
   month: string;
 };
 
+//دریافت بودجه ها
 export async function getBudgets(): Promise<Budget[]> {
   const response = await fetch("/api/budgets");
 

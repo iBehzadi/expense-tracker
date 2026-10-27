@@ -1,12 +1,17 @@
 import React from "react";
 import DashboardNavbar from "@/Components/DashboardNavbar";
-
 import NavigationMenu from "@/Components/NavigationMenu";
+import { getCurrentUserId } from "@/lib/api/auth";
+import { redirect } from "next/navigation";
 
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const isUserLogin = await getCurrentUserId();
+  console.log(isUserLogin);
+  if (!isUserLogin) {
+    redirect("/login");
+  }
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <DashboardNavbar />

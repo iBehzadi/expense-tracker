@@ -10,7 +10,7 @@ export type Transaction = {
   updatedAt: string;
 };
 
-
+//دریافت تراکنش ها
 export async function getTransactions(): Promise<Transaction[]> {
   const response = await fetch("/api/transactions");
 

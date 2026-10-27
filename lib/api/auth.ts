@@ -4,6 +4,7 @@ import { jwtVerify, SignJWT } from "jose";
 const COOKIE_NAME = "session";
 const SESSION_DURATION = 60 * 60 * 24 * 7;
 
+//دریافت کلید محرمانه
 function getSecret() {
   const secret = process.env.AUTH_SECRET;
 
@@ -33,6 +34,7 @@ export async function createSession(userId: number) {
   });
 }
 
+//دریافت ایدی کاربر
 export async function getCurrentUserId(): Promise<number | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
@@ -60,6 +62,7 @@ export async function getCurrentUserId(): Promise<number | null> {
   }
 }
 
+//پاکسازی نشست
 export async function clearSession() {
   const cookieStore = await cookies();
   cookieStore.delete(COOKIE_NAME);
