@@ -1,7 +1,9 @@
 
+import TransactionManager from "@/Components/dashboard/TransactionManager";
 import React from "react";
-
 export default function transactions() {
 
-  return <div>transactions</div>;
+  return <div>
+    <TransactionManager />
+  </div>;
 }

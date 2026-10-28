@@ -7,6 +7,7 @@ type DefButtonProps = {
   onBtnClick?: MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
+  classes?:string
 };
 
 const colorClasses = {
@@ -21,12 +22,14 @@ export default function DefButton({
   onBtnClick,
   type = "button",
   disabled = false,
+  classes
 }: DefButtonProps) {
+
   return (
     <button
       type={type}
       disabled={disabled}
-      className={`rounded px-3 py-2 text-white transition disabled:opacity-50 ${colorClasses[color]}`}
+      className={`rounded px-3 py-2 text-white transition disabled:opacity-50 ${colorClasses[color]} ${classes}`}
       onClick={onBtnClick}
     >
       {title}

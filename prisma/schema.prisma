@@ -7,7 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 enum AccountType {
   BANK
   CASH
@@ -33,8 +32,9 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  accounts   Account[]
-  categories Category[]
+  accounts     Account[]
+  categories   Category[]
+  transactions Transaction[]
 }
 
 model Account {
@@ -85,9 +85,11 @@ model Transaction {
 
   accountId  Int
   categoryId Int
+  userId     Int
 
   account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  user     User     @relation(fields: [userId], references: [id])
 
   @@index([accountId, date])
   @@index([categoryId, date])

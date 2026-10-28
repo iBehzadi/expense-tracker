@@ -1,5 +1,5 @@
 import React from "react";
-import DashboardNavbar from "@/Components/DashboardNavbar";
+import DashboardNavbar from "@/Components/dashboard/DashboardNavbar";
 import NavigationMenu from "@/Components/NavigationMenu";
 import { getCurrentUserId } from "@/lib/api/auth";
 import { redirect } from "next/navigation";
@@ -8,7 +8,6 @@ export default async function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const isUserLogin = await getCurrentUserId();
-  console.log(isUserLogin);
   if (!isUserLogin) {
     redirect("/login");
   }
@@ -25,13 +24,17 @@ export default async function DashboardLayout({
         </aside>
 
         {/* Main Content */}
-        <main className="min-w-0 flex-1 p-4 pb-24 md:p-6">{children}</main>
+        <main className="min-w-0 flex-1 ">{children}</main>
       </div>
 
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-gray-200 bg-white px-1 md:hidden dark:border-gray-700 dark:bg-gray-900">
         <NavigationMenu mobile />
       </nav>
+
+      <button className="fixed bottom-20 left-5 rounded-full w-12 h-12 flex items-center justify-center bg-amber-400 px-4 py-2 text-white text-2xl">
+        +
+      </button>
     </div>
   );
 }

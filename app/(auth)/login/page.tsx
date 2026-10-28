@@ -59,7 +59,7 @@ export default function LoginPage() {
     <main className="mx-auto mt-12 w-full max-w-md px-4">
       <h1 className="mb-6 text-2xl font-bold">ورود به حساب کاربری</h1>
 
-      <form onSubmit={formik.handleSubmit} className="space-y-5">
+      <form method="POST" onSubmit={formik.handleSubmit} className="space-y-5">
         <div>
           <label htmlFor="email" className="mb-2 block">
             ایمیل

@@ -21,7 +21,6 @@ const navItems: NavItem[] = [
   { title: "بودجه", path: "/budgets", icon: GoGoal },
   { title: "گزارش‌ها", path: "/reports", icon: BiChart },
   { title: "تنظیمات", path: "/settings", icon: CiSettings },
-  
 ];
 
 type NavigationMenuProps = {
