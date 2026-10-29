@@ -1,28 +1,26 @@
-
 import { prisma } from "../../lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
 
 export default async function DashboardPage() {
-  const getUser = await getCurrentUserId();
-  if (getUser === null) {
+  const userId = await getCurrentUserId();
+  if (userId === null) {
     throw new Error("کاربر شناسایی نشد");
   }
   const account = await prisma.account.findFirst({
     where: {
-      userId: getUser,
+      userId,
     },
   });
 
   const transactions = await prisma.transaction.findMany({
-  where: {
-    userId: getUser,
-  },
-  orderBy: {
-    date: "desc",
-  },
-  take: 5,
-});
-
+    where: {
+      userId
+    },
+    orderBy: {
+      date: "desc",
+    },
+    take: 5,
+  });
 
   const totalIncome = transactions
     .filter((transaction) => transaction.type === "income")

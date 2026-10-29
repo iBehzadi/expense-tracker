@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
+import { getCurrentUserId } from "@/lib/api/auth";
 
 // GET /api/transactions
 export async function GET() {
+
+  const userId = await getCurrentUserId();
+  if (userId == null) {
+    return NextResponse.json(
+      { message: "ابتدا وارد حساب کاربری شوید" },
+      { status: 401 },
+    );
+  }
   try {
     const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+      },
       orderBy: {
         date: "desc",
       },
@@ -43,6 +55,14 @@ export async function GET() {
 
 // POST /api/transactions
 export async function POST(request: Request) {
+  const userId = await getCurrentUserId();
+
+  if (userId == null) {
+    return NextResponse.json(
+      { message: "ابتدا وارد حساب کاربری شوید" },
+      { status: 401 }
+    );
+  }
   // ابتدا JSON ورودی را بررسی می‌کنیم.
   let rawBody: unknown;
 
@@ -100,10 +120,7 @@ export async function POST(request: Request) {
 
   if (typeof amount === "number" && Number.isSafeInteger(amount)) {
     amountString = String(amount);
-  } else if (
-    typeof amount === "string" &&
-    /^\d+$/.test(amount.trim())
-  ) {
+  } else if (typeof amount === "string" && /^\d+$/.test(amount.trim())) {
     amountString = amount.trim();
   } else {
     return NextResponse.json(
@@ -201,6 +218,7 @@ export async function POST(request: Request) {
         amount: BigInt(amountString),
         type,
         accountId,
+        userId,
         categoryId,
         description:
           typeof description === "string" && description.trim()
@@ -235,9 +253,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Create transaction error:", error);
 
-    return NextResponse.json(
-      { message: "خطا در ثبت تراکنش" },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: "خطا در ثبت تراکنش" }, { status: 500 });
   }
 }

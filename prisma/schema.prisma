@@ -14,11 +14,6 @@ enum AccountType {
   OTHER
 }
 
-enum TransactionType {
-  income
-  expense
-}
-
 enum CategoryType {
   income
   expense
@@ -35,6 +30,7 @@ model User {
   accounts     Account[]
   categories   Category[]
   transactions Transaction[]
+  budgets      Budget[]
 }
 
 model Account {
@@ -74,14 +70,13 @@ model Category {
 }
 
 model Transaction {
-  id          Int             @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   amount      BigInt
-  type        TransactionType
   description String?
-  date        DateTime        @default(now())
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   accountId  Int
   categoryId Int
@@ -89,22 +84,25 @@ model Transaction {
 
   account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([accountId, date])
   @@index([categoryId, date])
+  @@index([userId, date])
 }
 
 model Budget {
   id         Int      @id @default(autoincrement())
   categoryId Int
   limit      BigInt
+  userId     Int
   month      String // نمونه: "2026-10"
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, month])
-  @@index([month])
+  @@index([userId, month])
 }
