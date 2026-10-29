@@ -4,7 +4,6 @@ import { getCurrentUserId } from "@/lib/api/auth";
 
 // GET /api/transactions
 export async function GET() {
-
   const userId = await getCurrentUserId();
   if (userId == null) {
     return NextResponse.json(
@@ -60,7 +59,7 @@ export async function POST(request: Request) {
   if (userId == null) {
     return NextResponse.json(
       { message: "ابتدا وارد حساب کاربری شوید" },
-      { status: 401 }
+      { status: 401 },
     );
   }
   // ابتدا JSON ورودی را بررسی می‌کنیم.
@@ -171,21 +170,13 @@ export async function POST(request: Request) {
   try {
     // بررسی وجود حساب و دسته‌بندی
     const [account, category] = await Promise.all([
-      prisma.account.findUnique({
-        where: { id: accountId },
-        select: {
-          id: true,
-          userId: true,
-        },
+      prisma.account.findFirst({
+        where: { id: accountId, userId },
+        select: { id: true, isActive: true },
       }),
-
-      prisma.category.findUnique({
-        where: { id: categoryId },
-        select: {
-          id: true,
-          userId: true,
-          type: true,
-        },
+      prisma.category.findFirst({
+        where: { id: categoryId, userId },
+        select: { id: true, type: true },
       }),
     ]);
 
@@ -196,22 +187,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // حساب و دسته‌بندی باید متعلق به یک کاربر باشند.
-    if (account.userId !== category.userId) {
-      return NextResponse.json(
-        { message: "حساب مالی و دسته‌بندی با هم مطابقت ندارند" },
-        { status: 400 },
-      );
-    }
-
-    // نوع دسته‌بندی باید با نوع تراکنش یکی باشد.
     if (category.type !== type) {
       return NextResponse.json(
         { message: "نوع دسته‌بندی با نوع تراکنش مطابقت ندارد" },
         { status: 400 },
       );
     }
-
+    if (!account.isActive) {
+      return NextResponse.json(
+        { message: "این حساب غیرفعال است" },
+        { status: 400 },
+      );
+    }
+    
     const transaction = await prisma.transaction.create({
       data: {
         title: title.trim(),
