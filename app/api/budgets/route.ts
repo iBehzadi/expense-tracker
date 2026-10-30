@@ -1,9 +1,17 @@
+import { getCurrentUserId } from "@/lib/api/auth";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 import { Prisma } from "@/app/generated/prisma/client";
 
 // GET /api/budgets?month=2026-10
 export async function GET(request: Request) {
+  const userId = await getCurrentUserId();
+  if (userId == null) {
+    return NextResponse.json(
+      { message: "ابتدا وارد حساب کاربری شوید" },
+      { status: 401 },
+    );
+  }
   try {
     const { searchParams } = new URL(request.url);
     const month = searchParams.get("month");
@@ -16,7 +24,7 @@ export async function GET(request: Request) {
     }
 
     const budgets = await prisma.budget.findMany({
-      where: month ? { month } : undefined,
+      where: { userId, ...(month ? { month } : {}) },
       orderBy: {
         category: {
           name: "asc",
@@ -52,6 +60,13 @@ export async function GET(request: Request) {
 // POST /api/budgets
 export async function POST(request: Request) {
   let body: unknown;
+  const userId = await getCurrentUserId();
+  if (userId == null) {
+    return NextResponse.json(
+      { message: "ابتدا وارد حساب کاربری شوید" },
+      { status: 401 },
+    );
+  }
 
   try {
     body = await request.json();
@@ -110,15 +125,9 @@ export async function POST(request: Request) {
 
   try {
     // بررسی وجود دسته‌بندی
-    const category = await prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-      },
+    const category = await prisma.category.findFirst({
+      where: { id: categoryId, userId },
+      select: { id: true, name: true, type: true },
     });
 
     if (!category) {
@@ -137,11 +146,7 @@ export async function POST(request: Request) {
     }
 
     const budget = await prisma.budget.create({
-      data: {
-        categoryId,
-        limit: budgetLimit,
-        month,
-      },
+      data: { categoryId, limit: budgetLimit, month, userId },
       include: {
         category: {
           select: {

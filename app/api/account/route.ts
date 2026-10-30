@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
@@ -10,7 +9,7 @@ export async function GET() {
   if (userId == null) {
     return NextResponse.json(
       { message: "ابتدا وارد حساب کاربری شوید" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -24,7 +23,12 @@ export async function GET() {
     },
   });
 
-  return NextResponse.json(accounts);
+  return NextResponse.json(
+    accounts.map((a) => ({
+      ...a,
+      initialBalance: a.initialBalance.toString(),
+    })),
+  );
 }
 
 // ایجاد حساب جدید
@@ -34,15 +38,14 @@ export async function POST(request: Request) {
   if (userId == null) {
     return NextResponse.json(
       { message: "ابتدا وارد حساب کاربری شوید" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
   try {
     const body = await request.json();
 
-    const name =
-      typeof body.name === "string" ? body.name.trim() : "";
+    const name = typeof body.name === "string" ? body.name.trim() : "";
 
     const allowedTypes = ["BANK", "CASH", "SAVINGS", "OTHER"];
 
@@ -53,19 +56,16 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         { message: "نام یا نوع حساب معتبر نیست" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const initialBalance = body.initialBalance ?? "0";
 
-    if (
-      typeof initialBalance !== "string" ||
-      !/^\d+$/.test(initialBalance)
-    ) {
+    if (typeof initialBalance !== "string" || !/^\d+$/.test(initialBalance)) {
       return NextResponse.json(
         { message: "موجودی اولیه باید عدد صحیح نامنفی باشد" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -83,12 +83,9 @@ export async function POST(request: Request) {
         ...account,
         initialBalance: account.initialBalance.toString(),
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch {
-    return NextResponse.json(
-      { message: "خطا در ایجاد حساب" },
-      { status: 400 }
-    );
+    return NextResponse.json({ message: "خطا در ایجاد حساب" }, { status: 400 });
   }
 }

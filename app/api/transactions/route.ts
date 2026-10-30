@@ -204,7 +204,6 @@ export async function POST(request: Request) {
       data: {
         title: title.trim(),
         amount: BigInt(amountString),
-        type,
         accountId,
         userId,
         categoryId,
