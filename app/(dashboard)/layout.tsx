@@ -28,7 +28,7 @@ export default async function DashboardLayout({
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-gray-200 bg-white px-1 md:hidden dark:border-gray-700 dark:bg-gray-900">
+      <nav className="fixed  bottom-0 left-0 right-0 z-60 flex h-16 items-center justify-around border-t border-gray-200 bg-white px-1 md:hidden dark:border-gray-700 dark:bg-gray-900">
         <NavigationMenu mobile />
       </nav>
 

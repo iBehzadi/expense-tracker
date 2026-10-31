@@ -3,11 +3,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BiChart, BiData, BiHome } from "react-icons/bi";
-import { CiSettings } from "react-icons/ci";
-import { GoGoal } from "react-icons/go";
 import type { IconType } from "react-icons";
-
+import { FaSackDollar } from "react-icons/fa6";
+import { GrTransaction } from "react-icons/gr";
+import { TbReportAnalytics } from "react-icons/tb";
+import { MdSpaceDashboard } from "react-icons/md";
+import { IoSettings } from "react-icons/io5";
 
 type NavItem = {
   title: string;
@@ -16,11 +17,11 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { title: "داشبورد", path: "/", icon: BiHome },
-  { title: "تراکنش‌ها", path: "/transactions", icon: BiData },
-  { title: "بودجه", path: "/budgets", icon: GoGoal },
-  { title: "گزارش‌ها", path: "/reports", icon: BiChart },
-  { title: "تنظیمات", path: "/settings", icon: CiSettings },
+  { title: "داشبورد", path: "/", icon: MdSpaceDashboard },
+  { title: "تراکنش‌ها", path: "/transactions", icon: GrTransaction },
+  { title: "بودجه", path: "/budgets", icon: FaSackDollar },
+  { title: "گزارش‌ها", path: "/reports", icon: TbReportAnalytics },
+  { title: "تنظیمات", path: "/settings", icon: IoSettings },
 ];
 
 type NavigationMenuProps = {

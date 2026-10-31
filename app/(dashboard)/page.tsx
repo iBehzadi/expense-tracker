@@ -1,6 +1,8 @@
 import { prisma } from "../../lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
 import Link from "next/link";
+import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
+import { GoArrowUpRight,GoArrowDownLeft } from "react-icons/go";
 
 const formatToman = (amount: bigint) =>
   new Intl.NumberFormat("fa-IR").format(amount);
@@ -30,9 +32,7 @@ export default async function DashboardPage() {
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
           <div className="mb-4 text-4xl">💳</div>
 
-          <h1 className="mb-2 text-xl font-bold">
-            هنوز حسابی ایجاد نکردی!
-          </h1>
+          <h1 className="mb-2 text-xl font-bold">هنوز حسابی ایجاد نکردی!</h1>
 
           <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
             برای شروع مدیریت درآمد و هزینه‌ها، ابتدا حساب مالی خودت رو ایجاد کن.
@@ -52,17 +52,9 @@ export default async function DashboardPage() {
   // محدوده تاریخ ماه جاری
   const now = new Date();
 
-  const monthStart = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    1,
-  );
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const nextMonth = new Date(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    1,
-  );
+  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
   const [recent, income, expense] = await Promise.all([
     prisma.transaction.findMany({
@@ -114,28 +106,16 @@ export default async function DashboardPage() {
   }).format(now);
 
   return (
-    <main className="mx-auto max-w-7xl space-y-8 p-4 md:p-8">
-
+    <main className="mx-auto max-w-7xl space-y-4 p-4 md:p-8">
       {/* Header */}
       <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">
-            داشبورد
-          </h1>
-
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            خلاصه وضعیت مالی و تراکنش‌های شما
-          </p>
-        </div>
-
         <span className="text-sm text-gray-500 dark:text-gray-400">
           {currentMonth}
         </span>
       </header>
 
       {/* Statistics */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-
+      <section className="grid grid-cols-2 gap-4 xl:grid-cols-3">
         {/* Income */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-5 flex items-center justify-between">
@@ -144,7 +124,7 @@ export default async function DashboardPage() {
             </span>
 
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-xl text-emerald-600 dark:bg-emerald-500/10">
-              ↗
+              <FaArrowAltCircleUp />
             </span>
           </div>
 
@@ -162,7 +142,7 @@ export default async function DashboardPage() {
             </span>
 
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-xl text-rose-600 dark:bg-rose-500/10">
-              ↙
+              <FaArrowAltCircleDown />
             </span>
           </div>
 
@@ -173,7 +153,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Balance */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:col-span-2 xl:col-span-1">
+        <div className="col-span-2 rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-5 flex items-center justify-between">
             <span className="text-sm text-gray-500 dark:text-gray-400">
               مانده خالص این ماه
@@ -196,13 +176,10 @@ export default async function DashboardPage() {
       </section>
 
       {/* Recent Transactions */}
-      <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-
+      <section className="overflow-hidden mb-18 rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between border-b border-gray-200 p-5 dark:border-slate-800">
           <div>
-            <h2 className="font-bold">
-              تراکنش‌های اخیر
-            </h2>
+            <h2 className="font-bold">تراکنش‌های اخیر</h2>
 
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               آخرین ۵ تراکنش ثبت‌شده
@@ -220,8 +197,7 @@ export default async function DashboardPage() {
         {recent.length > 0 ? (
           <ul className="divide-y divide-gray-100 dark:divide-slate-800">
             {recent.map((transaction) => {
-              const isIncome =
-                transaction.category?.type === "income";
+              const isIncome = transaction.category?.type === "income";
 
               return (
                 <li
@@ -236,7 +212,7 @@ export default async function DashboardPage() {
                           : "bg-rose-100 text-rose-600 dark:bg-rose-500/10"
                       }`}
                     >
-                      {isIncome ? "↗" : "↙"}
+                      {isIncome ? <GoArrowUpRight/> : <GoArrowDownLeft />}
                     </div>
 
                     <div className="min-w-0">
@@ -254,16 +230,13 @@ export default async function DashboardPage() {
 
                   <p
                     className={`shrink-0 text-sm font-bold ${
-                      isIncome
-                        ? "text-emerald-600"
-                        : "text-rose-600"
+                      isIncome ? "text-emerald-600" : "text-rose-600"
                     }`}
                   >
-                    {isIncome ? "+" : "−"}
+                    
                     {formatToman(transaction.amount)}
-                    <span className="mr-1 text-xs font-normal">
-                      تومان
-                    </span>
+                    {isIncome ? "+" : "-"}
+                    <span className="mr-1 text-xs font-normal">تومان</span>
                   </p>
                 </li>
               );
@@ -271,9 +244,7 @@ export default async function DashboardPage() {
           </ul>
         ) : (
           <div className="p-10 text-center">
-            <p className="font-medium">
-              هنوز تراکنشی ثبت نکردی
-            </p>
+            <p className="font-medium">هنوز تراکنشی ثبت نکردی</p>
 
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               بعد از ثبت اولین تراکنش، اطلاعات اینجا نمایش داده می‌شه.

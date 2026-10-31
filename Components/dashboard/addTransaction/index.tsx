@@ -26,7 +26,7 @@ export default function AddTransaction({
 
   return (
     <div
-      className={`fixed inset-0 bg-black/30 flex items-end justify-center transition-transform duration-300 ${
+      className={`fixed inset-0 z-60 bg-black/30 flex items-end justify-center transition-transform duration-300 ${
         onShow
           ? "translate-y-0"
           : "translate-y-full invisible pointer-events-none"

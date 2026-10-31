@@ -112,7 +112,7 @@ async function main() {
   const user = await prisma.user.upsert({
     where: { email: DEMO_EMAIL },
     update: { passwordHash },
-    create: { name: "کاربر نمونه", email: DEMO_EMAIL, passwordHash },
+    create: { name: "بهزاد", email: DEMO_EMAIL, passwordHash },
   });
 
   // پاک کردن دادهٔ قبلی کاربر دمو تا seed قابل اجرای مجدد باشد
