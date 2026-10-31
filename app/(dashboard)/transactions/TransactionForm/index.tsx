@@ -5,14 +5,15 @@ import { useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 type TransactionType = "expense" | "income";
 
-type AddTransactionProps = {
+type TransactionFormProps = {
   onShow?: boolean;
   onClose: () => void;
+  transaction?: string;
 };
-export default function AddTransaction({
+export default function TransactionForm({
   onShow,
   onClose,
-}: AddTransactionProps) {
+}: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>("expense");
 
   const handleType = (t: TransactionType) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import DashboardNavbar from "@/Components/dashboard/DashboardNavbar";
+import AppHeader from "@/Components/dashboard/AppHeader";
 import NavigationMenu from "@/Components/NavigationMenu";
 import { getCurrentUserId } from "@/lib/api/auth";
 import { redirect } from "next/navigation";
@@ -13,7 +13,7 @@ export default async function DashboardLayout({
   }
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <DashboardNavbar />
+      <AppHeader />
 
       <div className="flex">
         {/* Desktop Sidebar */}

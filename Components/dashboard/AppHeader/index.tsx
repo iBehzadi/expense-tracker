@@ -10,7 +10,7 @@ interface User {
   email: string;
 }
 
-export default function DashboardNavbar() {
+export default function AppHeader() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
