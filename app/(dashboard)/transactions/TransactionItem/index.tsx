@@ -78,6 +78,7 @@ export default function TransactionItem({
       </li>
       <TransactionForm
         onShow={toggleForm}
+        transaction={transaction}
         onClose={() => setToggleForm(false)}
       />
     </>

@@ -1,29 +1,67 @@
 "use client";
 
 import DefButton from "@/Components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 type TransactionType = "expense" | "income";
 
 type TransactionFormProps = {
   onShow?: boolean;
   onClose: () => void;
-  transaction?: string;
+  transaction?: {
+    category: {
+      name: string;
+      type: "income" | "expense";
+    };
+  } & {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: number;
+    title: string;
+    amount: bigint;
+    description: string | null;
+    date: Date;
+    accountId: number;
+    categoryId: number;
+  };
 };
 export default function TransactionForm({
   onShow,
   onClose,
+  transaction,
 }: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>("expense");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    if (transaction) {
+      setType(transaction.category.type);
+      setAmount(transaction.amount.toString());
+      setDescription(transaction.description ?? "");
+
+      const d = new Date(transaction.date);
+      const localDate = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+
+      setDate(localDate.toISOString().slice(0, 10));
+    } else {
+      setType("expense");
+      setAmount("");
+      setDescription("");
+      setDate(new Date().toLocaleDateString("en-US"));
+    }
+  }, [transaction, onShow]);
 
   const handleType = (t: TransactionType) => {
     setType(t);
   };
-  //   const wallet = (val, name) => (
-  //     <select>
-  //       <option value={val}>{name}</option>
-  //     </select>
-  //   );
+  const selectOpt = (val: string | undefined, name: string | undefined) => (
+    <select>
+      <option value={val}>{name}</option>
+    </select>
+  );
 
   return (
     <div
@@ -53,7 +91,7 @@ export default function TransactionForm({
                 type === "expense"
                   ? "bg-white text-black"
                   : "bg-black/10 text-white"
-              }`}
+              } `}
             >
               هزینه
             </button>
@@ -73,36 +111,35 @@ export default function TransactionForm({
 
           <input
             type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
             placeholder="0"
-            inputMode="numeric"
             className="bg-gray-50 py-2 px-4 rounded outline-0"
-            name=""
-            id=""
           />
         </div>
 
         <div className="flex flex-col w-full  gap-4 px-6 items-start ">
-          <span>حساب: بانک ملت</span>
           <div>
             <label htmlFor="cat">دسته بندی :</label>
-            <select name="cat" id="">
-              <option value="">خوراک</option>
-            </select>
+            {selectOpt(transaction?.category.type, transaction?.category.name)}
           </div>
-          <input type="date" name="" id="" />
+          <label htmlFor="">
+            تاریخ :‌
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </label>
           <label htmlFor="desc">توضیحات</label>
           <textarea
-            name="desc"
-            className="border border-gray-200 shadow w-full h-20 px-4 py-2 resize-none"
-            placeholder="مثلا خرید پوشاک ..."
-            id=""
-          ></textarea>
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
         <DefButton
-          onBtnClick={() => {
-            onClose;
-          }}
-          title="ثبت تراکنش"
+          onBtnClick={onClose}
+          title={transaction ? "ویرایش تراکنش" : "ثبت تراکنش"}
           color="green"
           classes="w-[80%] py-3"
         />
