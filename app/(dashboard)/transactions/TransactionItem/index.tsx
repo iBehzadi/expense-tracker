@@ -2,6 +2,11 @@
 import React, { useState } from "react";
 import { GoArrowDownLeft, GoArrowUpRight } from "react-icons/go";
 import TransactionForm from "../TransactionForm";
+type account = {
+  id: number;
+  name: string;
+  type: string;
+};
 type TransactionItemProps = {
   isIncome: boolean;
   transaction: {
@@ -21,6 +26,12 @@ type TransactionItemProps = {
     accountId: number;
     categoryId: number;
   };
+  categories: {
+    type: "income" | "expense";
+    id: number;
+    name: string;
+  }[];
+  accounts: account[];
 };
 const formatToman = (amount: bigint) =>
   new Intl.NumberFormat("fa-IR").format(amount);
@@ -35,8 +46,11 @@ const formatDate = (date: Date) =>
 export default function TransactionItem({
   isIncome,
   transaction,
+  categories,
+  accounts,
 }: TransactionItemProps) {
   const [toggleForm, setToggleForm] = useState(false);
+
   return (
     <>
       <li
@@ -80,6 +94,8 @@ export default function TransactionItem({
         onShow={toggleForm}
         transaction={transaction}
         onClose={() => setToggleForm(false)}
+        categories={categories}
+        accounts={accounts}
       />
     </>
   );

@@ -16,11 +16,11 @@ export default async function transactions() {
     where: { userId },
   });
 
-  const [recent, income, expense] = await Promise.all([
+  const [result, cat, acc] = await Promise.all([
     prisma.transaction.findMany({
       where: { userId },
       orderBy: { date: "desc" },
-      take: 5,
+
       include: {
         category: {
           select: {
@@ -31,22 +31,29 @@ export default async function transactions() {
       },
     }),
 
-    prisma.transaction.aggregate({
+    prisma.category.findMany({
       where: {
-        userId,
-        category: { type: "income" },
+        userId: userId,
       },
-      _sum: { amount: true },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+      },
     }),
 
-    prisma.transaction.aggregate({
+    prisma.account.findMany({
       where: {
-        userId,
-        category: { type: "expense" },
+        userId: userId,
       },
-      _sum: { amount: true },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+      },
     }),
   ]);
+
   // اگر کاربر هنوز حسابی ایجاد نکرده باشد
   if (!account) {
     return (
@@ -73,15 +80,17 @@ export default async function transactions() {
   return (
     <div className="mx-auto max-w-7xl space-y-4 p-4 md:p-8">
       <section className="overflow-hidden mb-18 rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-        {recent.length > 0 ? (
+        {result.length > 0 ? (
           <ul className="divide-y divide-gray-100 dark:divide-slate-800">
-            {recent.map((transaction) => {
+            {result.map((transaction) => {
               const isIncome = transaction.category?.type === "income";
               return (
                 <TransactionItem
                   isIncome={isIncome}
                   key={transaction.id}
                   transaction={transaction}
+                  categories={cat}
+                  accounts={acc}
                 />
               );
             })}
@@ -96,7 +105,7 @@ export default async function transactions() {
           </div>
         )}
       </section>
-      <NewTransactionBtn />
+      <NewTransactionBtn categories={cat} />
     </div>
   );
 }

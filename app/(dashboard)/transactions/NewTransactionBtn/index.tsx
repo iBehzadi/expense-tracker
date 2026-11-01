@@ -2,8 +2,18 @@
 
 import { useState } from "react";
 import TransactionForm from "../TransactionForm";
+type Category = {
+  id: number;
+  name: string;
+  type: "income" | "expense";
+};
 
-export default function NewTransactionBtn() {
+type NewTransactionBtnProps = {
+  categories: Category[];
+};
+export default function NewTransactionBtn({
+  categories,
+}: NewTransactionBtnProps) {
   const [toggleForm, setToggleForm] = useState(false);
 
   return (
@@ -18,6 +28,7 @@ export default function NewTransactionBtn() {
       <TransactionForm
         onShow={toggleForm}
         onClose={() => setToggleForm(false)}
+        categories={categories}
       />
     </>
   );

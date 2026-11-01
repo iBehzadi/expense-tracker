@@ -1,5 +1,6 @@
 "use client";
 
+import { sayHello } from "@/utils/functions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BiWallet,BiUserCircle } from "react-icons/bi";
@@ -25,6 +26,7 @@ export default function AppHeader() {
         }
 
         const data = await response.json();
+        
         setUser(data.user);
       } catch (error) {
         console.error(error);

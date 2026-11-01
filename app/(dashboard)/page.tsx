@@ -60,7 +60,7 @@ export default async function DashboardPage() {
     prisma.transaction.findMany({
       where: { userId },
       orderBy: { date: "desc" },
-      take: 5,
+      take: 7,
       include: {
         category: {
           select: {
