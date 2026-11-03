@@ -2,7 +2,7 @@
 import type { MouseEventHandler } from "react";
 
 type DefButtonProps = {
-  title: string;
+  title: string ;
   color?: "blue" | "red" | "green";
   onBtnClick?: MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";

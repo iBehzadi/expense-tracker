@@ -10,35 +10,84 @@ export type Transaction = {
   updatedAt: string;
 };
 
-type setTransaction = {
-  id: number;
+export type SetTransaction = {
   title: string;
   amount: string;
   type: "income" | "expense";
   accountId: number;
   categoryId: number;
-  description: string;
-  date: string;
+  description?: string | null;
+  date?: string;
 };
-//دریافت تراکنش ها
+
+export type UpdateTransaction = {
+  id: number;
+  transaction: Partial<Omit<SetTransaction, "type">> & {
+    type?: "income" | "expense";
+  };
+};
+//get transactoins
 export async function getTransactions(): Promise<Transaction[]> {
   const response = await fetch("/api/transactions");
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("خطا در دریافت تراکنش‌ها");
+    throw new Error(data.message || "خطا در دریافت تراکنش‌ها");
   }
-
-  return response.json();
+  return data;
 }
-
-export async function setTransaction(transaction: setTransaction) {
+//post new transaction
+export async function setTransaction(transaction: SetTransaction) {
   const response = await fetch("/api/transactions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(transaction),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("خطا در انجام ...");
+    throw new Error(data.message || "خطا در ثبت تراکنش");
   }
 
-  return response.json();
+  return data;
+}
+
+//update transaction
+export async function updateTransaction({
+  id,
+  transaction,
+}: UpdateTransaction) {
+  const response = await fetch(`/api/transactions/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(transaction),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "خطا در تغییر تراکنش");
+  }
+
+  return data;
+}
+//delete transaction
+export async function deleteTransaction(id: number) {
+  const response = await fetch(`/api/transactions/${id}`, {
+    method: "DELETE",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "خطا در حذف تراکنش");
+  }
+
+  return data;
 }

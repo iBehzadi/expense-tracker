@@ -105,7 +105,7 @@ export default async function transactions() {
           </div>
         )}
       </section>
-      <NewTransactionBtn categories={cat} />
+      <NewTransactionBtn categories={cat} accounts={acc} />
     </div>
   );
 }

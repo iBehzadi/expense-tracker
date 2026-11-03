@@ -7,12 +7,18 @@ type Category = {
   name: string;
   type: "income" | "expense";
 };
-
+type account = {
+  id: number;
+  name: string;
+  type: string;
+};
 type NewTransactionBtnProps = {
   categories: Category[];
+  accounts: account[];
 };
 export default function NewTransactionBtn({
   categories,
+  accounts
 }: NewTransactionBtnProps) {
   const [toggleForm, setToggleForm] = useState(false);
 
@@ -29,6 +35,7 @@ export default function NewTransactionBtn({
         onShow={toggleForm}
         onClose={() => setToggleForm(false)}
         categories={categories}
+        accounts={accounts}
       />
     </>
   );
