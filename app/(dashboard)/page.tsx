@@ -1,18 +1,10 @@
+import { formatDate, formatToman } from "@/utils/format";
 import { prisma } from "../../lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
 import Link from "next/link";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
 import { GoArrowUpRight,GoArrowDownLeft } from "react-icons/go";
 
-const formatToman = (amount: bigint) =>
-  new Intl.NumberFormat("fa-IR").format(amount);
-
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("fa-IR", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
 
 export default async function DashboardPage() {
   const userId = await getCurrentUserId();

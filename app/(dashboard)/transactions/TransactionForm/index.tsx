@@ -6,7 +6,6 @@ import {
   setTransaction,
   updateTransaction,
 } from "@/lib/api/transactions";
-import { sayHello } from "@/utils/functions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
