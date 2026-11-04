@@ -8,7 +8,7 @@ import { FaSackDollar } from "react-icons/fa6";
 import { GrTransaction } from "react-icons/gr";
 import { TbReportAnalytics } from "react-icons/tb";
 import { MdSpaceDashboard } from "react-icons/md";
-import { IoSettings } from "react-icons/io5";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 
 type NavItem = {
   title: string;
@@ -21,7 +21,7 @@ const navItems: NavItem[] = [
   { title: "تراکنش‌ها", path: "/transactions", icon: GrTransaction },
   { title: "بودجه", path: "/budgets", icon: FaSackDollar },
   { title: "گزارش‌ها", path: "/reports", icon: TbReportAnalytics },
-  { title: "تنظیمات", path: "/settings", icon: IoSettings },
+  { title: "حساب‌ها", path: "/accounts", icon: MdOutlineAccountBalanceWallet },
 ];
 
 type NavigationMenuProps = {

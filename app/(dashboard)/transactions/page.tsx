@@ -2,7 +2,6 @@ import NewTransactionBtn from "./NewTransactionBtn";
 import { getCurrentUserId } from "@/lib/api/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import React from "react";
 import TransactionItem from "./TransactionItem";
 
 export default async function transactions() {
