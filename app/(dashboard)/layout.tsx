@@ -8,33 +8,34 @@ export default async function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const isUserLogin = await getCurrentUserId();
+
   if (!isUserLogin) {
     redirect("/login");
   }
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-gray-950">
+      {/* Header */}
       <AppHeader />
 
-      <div className="flex">
+      <div className="flex min-h-0 flex-1">
         {/* Desktop Sidebar */}
-        <aside className="hidden min-h-[calc(100vh-3.5rem)] w-64 shrink-0 border-l border-gray-200 bg-white p-4 md:flex md:flex-col dark:border-gray-700 dark:bg-gray-900">
-          <nav className="flex flex-col gap-2">
+        <aside className="hidden w-64 shrink-0 border-l border-gray-200 bg-white p-4 md:flex md:flex-col dark:border-gray-700 dark:bg-gray-900">
+          <nav className="flex flex-1 flex-col gap-2">
             <NavigationMenu />
           </nav>
         </aside>
 
         {/* Main Content */}
-        <main className="min-w-0 flex-1 ">{children}</main>
+        <main className="min-h-0 min-w-0 flex-1 overflow-y-auto pb-20 md:pb-0">
+          {children}
+        </main>
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed  bottom-0 left-0 right-0 z-60 flex h-16 items-center justify-around border-t border-gray-200 bg-white px-1 md:hidden dark:border-gray-700 dark:bg-gray-900">
+      <nav className="z-60 flex h-16 shrink-0 items-center justify-around border-t border-gray-200 bg-white px-1 md:hidden dark:border-gray-700 dark:bg-gray-900">
         <NavigationMenu mobile />
       </nav>
-
-      {/* <button className="fixed bottom-20 left-5 rounded-full w-12 h-12 flex items-center justify-center bg-amber-400 px-4 py-2 text-white text-2xl">
-        +
-      </button> */}
     </div>
   );
 }

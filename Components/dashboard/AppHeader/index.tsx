@@ -37,7 +37,7 @@ export default function AppHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90">
+    <header className="sticky shrink-0 top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90">
       <div
         dir="rtl"
         className="mx-auto grid max-w-7xl grid-cols-[1fr_auto] items-center gap-y-3 px-4 py-3 lg:flex lg:h-20 lg:justify-between lg:gap-6 lg:py-0"
