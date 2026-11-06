@@ -78,9 +78,9 @@ export default async function accounts() {
     return (
       <ul
         key={acc.id}
-        className="flex items-center justify-between p-4 gap-2 shadow-xl border border-gray-300 my-4 bg-white rounded mx-6 "
+        className="flex items-center justify-between p-3 gap-2 shadow-xl border border-gray-300 my-4 bg-white rounded mx-6 "
       >
-        {/* آیکون و نام حساب */}
+        {/*آیکون*/}
         <li
           className={`bg-blue-400  p-2 rounded text-white text-3xl ${colorClasses[acc.type]}`}
         >
@@ -94,6 +94,7 @@ export default async function accounts() {
             <GiWallet />
           )}
         </li>
+        {/* نام حساب */}
         <li>{acc.name}</li>
 
         {/* موجودی حساب */}

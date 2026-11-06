@@ -65,6 +65,7 @@ export default function TransactionItem({
                 : "bg-rose-100 text-rose-600 dark:bg-rose-500/10"
             }`}
           >
+            {/* ایکون نوع تراکنش */}
             {isIncome ? <GoArrowUpRight /> : <GoArrowDownLeft />}
           </div>
 
@@ -90,6 +91,8 @@ export default function TransactionItem({
           <span className="mr-1 text-xs font-normal">تومان</span>
         </p>
       </li>
+
+      {/* edit transaction modal */}
       <AddTransactionModal
         onShow={toggleForm}
         transaction={transaction}
