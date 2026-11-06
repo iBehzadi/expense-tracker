@@ -76,11 +76,11 @@ export default async function accounts() {
     return (
       <ul
         key={acc.id}
-        className="flex items-center justify-between p-4 gap-2 shadow-sm border border-gray-300 my-4 bg-white rounded mx-6 "
+        className="flex items-center justify-between p-4 gap-2 shadow-xl border border-gray-300 my-4 bg-white rounded mx-6 "
       >
         {/* آیکون و نام حساب */}
         <li
-          className={`bg-blue-400 p-2 rounded text-white text-3xl ${colorClasses[acc.type]}`}
+          className={`bg-blue-400  p-2 rounded text-white text-3xl ${colorClasses[acc.type]}`}
         >
           {acc.type === "BANK" ? (
             <IoCardOutline />
@@ -123,7 +123,7 @@ export default async function accounts() {
   return (
     <div className="flex flex-col">
       {/* نمایش دارایی کل */}
-      <div className="flex flex-col items-center py-4 bg-green-500 text-white shadow-sm">
+      <div className="flex flex-col items-center py-4 mt-4 mx-3 rounded-2xl bg-green-500 text-white shadow-xl">
         <h2 className="text-4xl font-bold">{formatToman(amount)}</h2>
         <h4 className="text-sm">دارایی کل شما</h4>
       </div>
@@ -131,17 +131,17 @@ export default async function accounts() {
       {/* حساب ها */}
       <div>{accountCards}</div>
       {/* باتن های ایجاد حساب و جیب به جیب */}
-      <div className="flex items-center justify-center gap-10">
+      <div className="flex items-center justify-center gap-10 mt-2">
         <button
           type="button"
-          className="text-6xl  px-6 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
+          className="text-6xl shadow-xl px-6 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
         >
           <FaMoneyBillTransfer />
           <span className="text-sm text-black/80">جیب به جیب</span>
         </button>
         <button
           type="button"
-          className="text-6xl focus:bg-gray-300 border border-green-300 text-green-400 bg-green-100 px-6 py-2 rounded hover:text-green-500 hover:bg-green-200 flex flex-col items-center"
+          className="text-6xl shadow-xl focus:bg-gray-300 border border-green-300 text-green-400 bg-green-100 px-6 py-2 rounded hover:text-green-500 hover:bg-green-200 flex flex-col items-center"
         >
           <IoMdAddCircle />
           <span className="text-sm text-black/80">افزودن حساب</span>
