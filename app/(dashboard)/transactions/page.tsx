@@ -1,8 +1,8 @@
-import NewTransactionBtn from "./NewTransactionBtn";
+import NewTransactionBtn from "../../../Components/dashboard/transactions/NewTransactionBtn";
 import { getCurrentUserId } from "@/lib/api/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import TransactionItem from "./TransactionItem";
+import TransactionItem from "../../../Components/dashboard/transactions/TransactionItem";
 
 export default async function transactions() {
   const userId = await getCurrentUserId();

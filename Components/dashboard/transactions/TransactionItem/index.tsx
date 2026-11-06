@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { GoArrowDownLeft, GoArrowUpRight } from "react-icons/go";
-import TransactionForm from "../TransactionForm";
+import AddTransactionModal from "../addTransactionModal";
 type account = {
   id: number;
   name: string;
@@ -90,7 +90,7 @@ export default function TransactionItem({
           <span className="mr-1 text-xs font-normal">تومان</span>
         </p>
       </li>
-      <TransactionForm
+      <AddTransactionModal
         onShow={toggleForm}
         transaction={transaction}
         onClose={() => setToggleForm(false)}

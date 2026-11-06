@@ -7,6 +7,8 @@ import { MdOutlineSavings } from "react-icons/md";
 import { GiWallet } from "react-icons/gi";
 import { IoMdAddCircle } from "react-icons/io";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { redirect } from "next/navigation";
+import AccountManager from "@/Components/dashboard/accounts/AccountManager";
 
 const colorClasses = {
   BANK: "bg-blue-400 hover:bg-blue-500 ",
@@ -19,7 +21,7 @@ export default async function accounts() {
   const userId = await getCurrentUserId();
 
   if (userId === null) {
-    throw new Error("کاربر شناسایی نشد");
+    redirect("/login");
   }
 
   //اتصال به دیتابیس و دریافت حساب ها و تراکنش ها
@@ -121,31 +123,32 @@ export default async function accounts() {
   }
 
   return (
-    <div className="flex flex-col">
-      {/* نمایش دارایی کل */}
-      <div className="flex flex-col items-center py-4 mt-4 mx-3 rounded-2xl bg-green-500 text-white shadow-xl">
+    <div className="flex flex-col mb-14">
+      {/* دارایی کل - ثابت */}
+      <div className="shrink-0 flex flex-col items-center py-4 mt-4 mx-3 rounded-2xl bg-green-500 text-white shadow-xl">
         <h2 className="text-4xl font-bold">{formatToman(amount)}</h2>
         <h4 className="text-sm">دارایی کل شما</h4>
       </div>
 
       {/* حساب ها */}
-      <div>{accountCards}</div>
-      {/* باتن های ایجاد حساب و جیب به جیب */}
-      <div className="flex items-center justify-center gap-10 mt-2">
-        <button
-          type="button"
-          className="text-6xl shadow-xl px-6 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
-        >
-          <FaMoneyBillTransfer />
-          <span className="text-sm text-black/80">جیب به جیب</span>
-        </button>
-        <button
-          type="button"
-          className="text-6xl shadow-xl focus:bg-gray-300 border border-green-300 text-green-400 bg-green-100 px-6 py-2 rounded hover:text-green-500 hover:bg-green-200 flex flex-col items-center"
-        >
-          <IoMdAddCircle />
-          <span className="text-sm text-black/80">افزودن حساب</span>
-        </button>
+      <div className="flex-1  ">
+        <div>{accountCards}</div>
+
+        {/* دکمه ها */}
+        <div className="flex items-center justify-center gap-10 mt-2 pb-4">
+          {/* جیب به حیب */}
+          <button
+            type="button"
+            disabled
+            className="text-6xl shadow-xl px-6 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
+          >
+            <FaMoneyBillTransfer />
+            <span className="text-sm text-black/80">جیب به جیب</span>
+          </button>
+
+          {/* افزودن حساب */}
+          <AccountManager />
+        </div>
       </div>
     </div>
   );

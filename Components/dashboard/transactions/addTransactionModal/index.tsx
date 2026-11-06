@@ -22,7 +22,7 @@ type account = {
   name: string;
   type: string;
 };
-type TransactionFormProps = {
+type addTransactionModalProps = {
   onShow?: boolean;
   onClose: () => void;
   transaction?: {
@@ -45,13 +45,13 @@ type TransactionFormProps = {
   categories: Category[];
   accounts: account[];
 };
-export default function TransactionForm({
+export default function AddTransactionModal({
   onShow,
   onClose,
   transaction,
   categories,
   accounts,
-}: TransactionFormProps) {
+}: addTransactionModalProps) {
   const [title, setTitle] = useState(transaction?.title);
   const [type, setType] = useState<TransactionType>("expense");
   const [amount, setAmount] = useState("");

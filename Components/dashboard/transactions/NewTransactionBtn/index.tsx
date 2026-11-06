@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import TransactionForm from "../TransactionForm";
+import AddTransactionModal from "../addTransactionModal";
 type Category = {
   id: number;
   name: string;
@@ -31,7 +31,7 @@ export default function NewTransactionBtn({
         +
       </button>
 
-      <TransactionForm
+      <AddTransactionModal
         onShow={toggleForm}
         onClose={() => setToggleForm(false)}
         categories={categories}
