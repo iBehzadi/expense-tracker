@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
   { title: "داشبورد", path: "/", icon: MdSpaceDashboard },
   { title: "تراکنش‌ها", path: "/transactions", icon: GrTransaction },
   { title: "بودجه", path: "/budgets", icon: FaSackDollar },
-  { title: "گزارش‌ها", path: "/reports", icon: TbReportAnalytics },
+  { title: "گزارش", path: "/reports", icon: TbReportAnalytics },
   { title: "حساب‌ها", path: "/accounts", icon: MdOutlineAccountBalanceWallet },
 ];
 

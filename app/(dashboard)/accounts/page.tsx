@@ -1,22 +1,10 @@
 import { getCurrentUserId } from "@/lib/api/auth";
 import { prisma } from "@/lib/prisma";
 import { formatToman } from "@/utils/format";
-import { IoCardOutline } from "react-icons/io5";
-import { BsCashCoin } from "react-icons/bs";
-import { MdOutlineSavings } from "react-icons/md";
-import { GiWallet } from "react-icons/gi";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { redirect } from "next/navigation";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
-import Link from "next/link";
 import AccountCard from "@/Components/dashboard/accounts/AccountCard";
-
-const colorClasses = {
-  BANK: "bg-blue-400 hover:bg-blue-500 ",
-  CASH: "bg-red-400 hover:bg-red-500",
-  SAVINGS: "bg-green-400 hover:bg-green-500",
-  OTHER: "bg-amber-400 hover:bg-amber-500",
-};
 
 export default async function accounts() {
   const userId = await getCurrentUserId();
@@ -117,19 +105,21 @@ export default async function accounts() {
       </div>
 
       {/* حساب ها */}
-      <div className="flex-1  ">
+      <div className="flex-1 ">
         <div>{accountCards}</div>
 
         {/* دکمه ها */}
-        <div className="flex items-center justify-center gap-10 mt-2 pb-4">
-          {/* جیب به حیب */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mt-2 pb-4 px-3">
+          {/* جیب به جیب */}
           <button
             type="button"
             disabled
-            className="text-6xl shadow-xl px-6 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
+            className="min-w-0 max-w-full text-6xl disabled:bg-gray-200 disabled:text-gray-400 shadow-xl px-4 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
           >
             <FaMoneyBillTransfer />
-            <span className="text-sm text-black/80">جیب به جیب</span>
+            <span className="text-sm text-black/80 text-center">
+              جیب به جیب (به زودی)
+            </span>
           </button>
 
           {/* افزودن حساب */}
