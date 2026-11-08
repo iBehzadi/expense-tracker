@@ -2,9 +2,25 @@
 
 import { useState } from "react";
 import { IoMdAddCircle } from "react-icons/io";
-import AddAccountModal from "../AddAccountModal";
+import { FiEdit2 } from "react-icons/fi";
+import AccountModal from "../AccountModal";
 
-export default function AccountManager() {
+type Account = {
+  id: number;
+  name: string;
+  type: "BANK" | "CASH" | "SAVINGS" | "OTHER";
+  initialBalance: string;
+};
+
+type AccountManagerProps = {
+  account?: Account;
+  classes?: string;
+};
+
+export default function AccountManager({
+  account,
+  classes
+}: AccountManagerProps) {
   const [onShow, setOnShow] = useState(false);
 
   return (
@@ -12,15 +28,19 @@ export default function AccountManager() {
       <button
         type="button"
         onClick={() => setOnShow(true)}
-        className="text-6xl shadow-xl px-6 py-2 border border-green-300 rounded text-green-400 bg-green-100 hover:bg-green-200 flex flex-col items-center"
+        className={classes}
       >
-        <IoMdAddCircle />
-        <span className="text-sm text-black/80">افزودن حساب</span>
+        {account ? <FiEdit2 /> : <IoMdAddCircle />}
+
+        <span className={account ? "text-sm" : "text-sm text-black/80"}>
+          {account ? "ویرایش حساب" : "افزودن حساب"}
+        </span>
       </button>
 
-      <AddAccountModal
+      <AccountModal
         onShow={onShow}
         onClose={() => setOnShow(false)}
+        account={account ?? null}
       />
     </>
   );

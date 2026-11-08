@@ -45,7 +45,9 @@ type addTransactionModalProps = {
   categories: Category[];
   accounts: account[];
 };
-export default function AddTransactionModal({
+
+
+export default function TransactionModal({
   onShow,
   onClose,
   transaction,
@@ -99,7 +101,6 @@ export default function AddTransactionModal({
       return;
     }
 
-    router.push("/transactions");
     router.refresh();
     onClose();
   };
@@ -127,7 +128,7 @@ export default function AddTransactionModal({
       });
     }
 
-    router.push("/transactions");
+
     router.refresh();
     onClose();
   };

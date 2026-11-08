@@ -1,22 +1,26 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DefButton from "@/Components/ui/button";
 import { IoCloseCircle } from "react-icons/io5";
-import {
-  IoCardOutline,
-  IoWalletOutline,
-} from "react-icons/io5";
+import { IoCardOutline, IoWalletOutline } from "react-icons/io5";
 import { BsCashCoin } from "react-icons/bs";
 import { MdOutlineSavings } from "react-icons/md";
 
 type AccountType = "BANK" | "CASH" | "SAVINGS" | "OTHER";
 
+type Account = {
+  id: number;
+  name: string;
+  type: AccountType;
+  initialBalance: string;
+};
+
 type AddAccountModalProps = {
   onShow: boolean;
   onClose: () => void;
+  account?: Account | null;
 };
 
 const accountTypes = [
@@ -33,9 +37,10 @@ const colorClasses = {
   OTHER: "bg-amber-500",
 };
 
-export default function AddAccountModal({
+export default function AccountModal({
   onShow,
   onClose,
+  account = null,
 }: AddAccountModalProps) {
   const [name, setName] = useState("");
   const [type, setType] = useState<AccountType>("BANK");
@@ -47,12 +52,12 @@ export default function AddAccountModal({
 
   useEffect(() => {
     if (onShow) {
-      setName("");
-      setType("BANK");
-      setInitialBalance("");
+      setName(account?.name ?? "");
+      setType(account?.type ?? "BANK");
+      setInitialBalance(account?.initialBalance ?? "");
       setError("");
     }
-  }, [onShow]);
+  }, [onShow, account]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,17 +76,20 @@ export default function AddAccountModal({
       setLoading(true);
       setError("");
 
-      const response = await fetch("/api/accounts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        account ? `/api/accounts/${account.id}` : "/api/accounts",
+        {
+          method: account ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            type,
+            initialBalance: initialBalance || "0",
+          }),
         },
-        body: JSON.stringify({
-          name: name.trim(),
-          type,
-          initialBalance: initialBalance || "0",
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -92,9 +100,7 @@ export default function AddAccountModal({
       onClose();
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "خطا در ثبت حساب",
-      );
+      setError(err instanceof Error ? err.message : "خطا در ثبت حساب");
     } finally {
       setLoading(false);
     }
@@ -130,7 +136,9 @@ export default function AddAccountModal({
             <IoCloseCircle size={26} />
           </button>
 
-          <h2 className="text-lg font-bold">افزودن حساب جدید</h2>
+          <h2 className="text-lg font-bold">
+            {account ? "ویرایش حساب" : "افزودن حساب"}
+          </h2>
 
           <div className="flex items-center justify-center text-5xl">
             {accountTypes.find((item) => item.value === type)?.icon}
@@ -200,25 +208,19 @@ export default function AddAccountModal({
                 placeholder="۰"
                 className="w-full bg-transparent text-lg font-bold outline-none dark:text-white"
               />
-              <span className="shrink-0 text-sm text-gray-500">
-                تومان
-              </span>
+              <span className="shrink-0 text-sm text-gray-500">تومان</span>
             </div>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
         </div>
 
         {/* Footer */}
         <div className="mb-12 flex items-center gap-3 border-t border-gray-100 px-5 pt-4 dark:border-slate-800">
           <DefButton
-            title={loading ? "در حال ثبت..." : "ثبت حساب"}
-            color="green"
+            title={account ? "ذخیره تغییرات" : "ثبت حساب"}
             type="submit"
-            classes="w-full rounded-xl py-3.5"
-            disabled={loading}
+            classes="rounded-xl bg-blue-200 w-full px-5 py-4 text-gray-700 hover:bg-blue-300 dark:bg-slate-700 dark:text-white"
           />
 
           <button

@@ -5,10 +5,11 @@ import { IoCardOutline } from "react-icons/io5";
 import { BsCashCoin } from "react-icons/bs";
 import { MdOutlineSavings } from "react-icons/md";
 import { GiWallet } from "react-icons/gi";
-import { IoMdAddCircle } from "react-icons/io";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { redirect } from "next/navigation";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
+import Link from "next/link";
+import AccountCard from "@/Components/dashboard/accounts/AccountCard";
 
 const colorClasses = {
   BANK: "bg-blue-400 hover:bg-blue-500 ",
@@ -71,38 +72,22 @@ export default async function accounts() {
   const accountCards = allAccounts.map((acc) => {
     const income = incomeMap.get(acc.id) ?? BigInt(0);
     const expense = expenseMap.get(acc.id) ?? BigInt(0);
+
     const balance = acc.initialBalance + income - expense;
 
     amount += balance;
 
     return (
-      <ul
+      <AccountCard
         key={acc.id}
-        className="flex items-center justify-between p-3 gap-2 shadow-xl border border-gray-300 my-4 bg-white rounded mx-6 "
-      >
-        {/*آیکون*/}
-        <li
-          className={`bg-blue-400  p-2 rounded text-white text-3xl ${colorClasses[acc.type]}`}
-        >
-          {acc.type === "BANK" ? (
-            <IoCardOutline />
-          ) : acc.type === "CASH" ? (
-            <BsCashCoin />
-          ) : acc.type === "SAVINGS" ? (
-            <MdOutlineSavings />
-          ) : (
-            <GiWallet />
-          )}
-        </li>
-        {/* نام حساب */}
-        <li>{acc.name}</li>
-
-        {/* موجودی حساب */}
-        <li className="flex flex-col items-end flex-1">
-          <span>{formatToman(balance)}</span>
-          <span className="text-[12px]">تومان</span>
-        </li>
-      </ul>
+        account={{
+          id: acc.id,
+          name: acc.name,
+          type: acc.type,
+          initialBalance: acc.initialBalance.toString(),
+        }}
+        balance={balance.toString()}
+      />
     );
   });
 
@@ -126,9 +111,9 @@ export default async function accounts() {
   return (
     <div className="flex flex-col mb-14">
       {/* دارایی کل - ثابت */}
-      <div className="shrink-0 flex flex-col items-center py-4 mt-4 mx-3 rounded-2xl bg-green-500 text-white shadow-xl">
-        <h2 className="text-4xl font-bold">{formatToman(amount)}</h2>
+      <div className="shrink-0 gap-2 flex flex-col items-center py-4 mt-4 mx-3 rounded-2xl bg-green-500 text-white shadow-xl">
         <h4 className="text-sm">دارایی کل شما</h4>
+        <h2 className="text-4xl font-bold">{formatToman(amount)}</h2>
       </div>
 
       {/* حساب ها */}
@@ -148,7 +133,7 @@ export default async function accounts() {
           </button>
 
           {/* افزودن حساب */}
-          <AccountManager />
+          <AccountManager classes="flex flex-col items-center rounded border border-green-300 bg-green-100 px-6 py-2 text-6xl text-green-400 shadow-xl hover:bg-green-200" />
         </div>
       </div>
     </div>

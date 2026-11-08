@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { GoArrowDownLeft, GoArrowUpRight } from "react-icons/go";
-import AddTransactionModal from "../addTransactionModal";
+import TransactionModal from "../TransactionModal";
 type account = {
   id: number;
   name: string;
@@ -93,7 +93,7 @@ export default function TransactionItem({
       </li>
 
       {/* edit transaction modal */}
-      <AddTransactionModal
+      <TransactionModal
         onShow={toggleForm}
         transaction={transaction}
         onClose={() => setToggleForm(false)}
