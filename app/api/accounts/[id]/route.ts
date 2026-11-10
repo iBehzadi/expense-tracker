@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
-import { updateUserAccount } from "@/lib/services/account.service";
+import {
+  getUserAccount,
+  updateUserAccount,
+} from "@/lib/services/account.service";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -47,10 +49,10 @@ export async function PUT(request: Request, { params }: Props) {
         { status: 400 },
       );
     }
-    const isActive = true;
+
     const result = await updateUserAccount({
       id: accountId,
-      isActive,
+      isActive: true,
       userId,
       input: {
         name: body.name,
@@ -63,9 +65,7 @@ export async function PUT(request: Request, { params }: Props) {
       return NextResponse.json({ message: "حساب پیدا نشد" }, { status: 404 });
     }
 
-    const account = await prisma.account.findFirst({
-      where: { id: accountId, userId },
-    });
+    const account = await getUserAccount({ userId, accountId });
 
     return NextResponse.json({
       ...account,

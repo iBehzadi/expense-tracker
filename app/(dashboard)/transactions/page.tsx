@@ -3,6 +3,11 @@ import { getCurrentUserId } from "@/lib/api/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import TransactionItem from "../../../Components/dashboard/transactions/TransactionItem";
+import { getUserTransactions } from "@/lib/services/transaction.service";
+import {
+  getUserAccount,
+  getUserAccounts,
+} from "@/lib/services/account.service";
 
 export default async function transactions() {
   const userId = await getCurrentUserId();
@@ -10,38 +15,13 @@ export default async function transactions() {
   if (userId === null) {
     throw new Error("کاربر شناسایی نشد");
   }
-
-  const account = await prisma.account.findFirst({
-    where: { userId },
-  });
+  // بررسی داشتن حساب
+  const hasAccount = getUserAccount({ userId, select: { id: true } });
 
   const [result, cat, acc] = await Promise.all([
-    prisma.transaction.findMany({
-      where: { userId },
-      orderBy: { date: "desc" },
-
-      include: {
-        category: {
-          select: {
-            name: true,
-            type: true,
-          },
-        },
-      },
-    }),
+    getUserTransactions({ userId }),
 
     prisma.category.findMany({
-      where: {
-       userId,
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-      },
-    }),
-
-    prisma.account.findMany({
       where: {
         userId,
       },
@@ -51,10 +31,20 @@ export default async function transactions() {
         type: true,
       },
     }),
+
+    getUserAccounts({
+      userId,
+      select: {
+        id: true,
+        name: true,
+        type: true,
+      },
+    }),
+
   ]);
 
   // اگر کاربر هنوز حسابی ایجاد نکرده باشد
-  if (!account) {
+  if (!hasAccount) {
     return (
       <main className="mx-auto max-w-7xl p-4 py-10 md:p-8">
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">

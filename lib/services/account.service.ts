@@ -2,7 +2,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import {
   CreateAccountParams,
-  GetUserAccountsParams,
+  GetUserAccountParams,
   UpdateUserAccountParams,
 } from "../types/account";
 
@@ -10,12 +10,27 @@ import {
 export async function getUserAccounts({
   userId,
   isActive,
-}: GetUserAccountsParams) {
+  select,
+}: GetUserAccountParams) {
   return prisma.account.findMany({
     where: {
       userId,
       isActive: isActive,
     },
+    select: select,
+  });
+}
+
+// get user account
+export async function getUserAccount({
+  userId,
+  accountId,
+  isActive,
+  select,
+}: GetUserAccountParams) {
+  return prisma.account.findFirst({
+    where: { userId, isActive, id: accountId },
+    select: select,
   });
 }
 
@@ -49,7 +64,7 @@ export async function updateUserAccount({
     where: {
       id,
       userId,
-      isActive
+      isActive,
     },
     data: {
       ...(name !== undefined && { name }),
@@ -60,3 +75,6 @@ export async function updateUserAccount({
     },
   });
 }
+
+// حذف حساب
+export async function deleteAccount() {}

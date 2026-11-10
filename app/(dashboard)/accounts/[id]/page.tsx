@@ -8,6 +8,10 @@ import { BsCashCoin } from "react-icons/bs";
 import { MdOutlineSavings } from "react-icons/md";
 import Link from "next/link";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
+import {
+  getUserAccount,
+  getUserAccounts,
+} from "@/lib/services/account.service";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -39,9 +43,7 @@ export default async function accountDetails({ params }: Props) {
   }
 
   const [account, transactions, cat, acc] = await Promise.all([
-    prisma.account.findFirst({
-      where: { userId, id: accountId },
-    }),
+    getUserAccount({ userId, accountId }),
 
     prisma.transaction.findMany({
       where: {
@@ -55,6 +57,7 @@ export default async function accountDetails({ params }: Props) {
         date: "desc",
       },
     }),
+
     prisma.category.findMany({
       where: {
         userId: userId,
@@ -66,16 +69,15 @@ export default async function accountDetails({ params }: Props) {
       },
     }),
 
-    prisma.account.findMany({
-      where: {
-        userId: userId,
-      },
+    getUserAccounts({
+      userId,
       select: {
         id: true,
         name: true,
         type: true,
       },
     }),
+    
   ]);
 
   if (!account) {

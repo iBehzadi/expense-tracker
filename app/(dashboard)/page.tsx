@@ -4,20 +4,19 @@ import { getCurrentUserId } from "@/lib/api/auth";
 import Link from "next/link";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
 import { GoArrowUpRight, GoArrowDownLeft } from "react-icons/go";
+import { getUserAccount } from "@/lib/services/account.service";
+import { getUserTransactions } from "@/lib/services/transaction.service";
 
 export default async function DashboardPage() {
+  //شناسایی و دریافت توکن کاربر
   const userId = await getCurrentUserId();
-
   if (userId === null) {
     throw new Error("کاربر شناسایی نشد");
   }
 
-  const account = await prisma.account.findFirst({
-    where: { userId },
-  });
-
   // اگر کاربر هنوز حسابی ایجاد نکرده باشد
-  if (!account) {
+  const hasAccount = await getUserAccount({ userId });
+  if (!hasAccount) {
     return (
       <main className="mx-auto max-w-7xl p-4 py-10 md:p-8">
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
@@ -42,25 +41,11 @@ export default async function DashboardPage() {
 
   // محدوده تاریخ ماه جاری
   const now = new Date();
-
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
   const [recent, income, expense] = await Promise.all([
-    prisma.transaction.findMany({
-      where: { userId },
-      orderBy: { date: "desc" },
-      take: 5,
-      include: {
-        category: {
-          select: {
-            name: true,
-            type: true,
-          },
-        },
-      },
-    }),
+    getUserTransactions({ userId, count: 5 }),
 
     prisma.transaction.aggregate({
       where: {

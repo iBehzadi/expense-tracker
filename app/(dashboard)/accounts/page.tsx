@@ -43,7 +43,7 @@ export default async function accounts() {
     }),
   ]);
 
-  let amount = BigInt(0);
+  let totalInventory = BigInt(0);
 
   const incomeMap = new Map<number, bigint>();
   for (const item of incomes) {
@@ -62,9 +62,9 @@ export default async function accounts() {
     const income = incomeMap.get(acc.id) ?? BigInt(0);
     const expense = expenseMap.get(acc.id) ?? BigInt(0);
 
-    const balance = acc.initialBalance + income - expense;
+    const accountBalance = acc.initialBalance + income - expense;
 
-    amount += balance;
+    totalInventory += accountBalance;
 
     return (
       <AccountCard
@@ -75,7 +75,7 @@ export default async function accounts() {
           type: acc.type,
           initialBalance: acc.initialBalance.toString(),
         }}
-        balance={balance.toString()}
+        balance={accountBalance.toString()}
       />
     );
   });
@@ -102,7 +102,7 @@ export default async function accounts() {
       {/* دارایی کل - ثابت */}
       <div className="shrink-0 gap-2 flex flex-col items-center py-4 mt-4 mx-3 rounded-2xl bg-green-500 text-white shadow-xl">
         <h4 className="text-sm">دارایی کل شما</h4>
-        <h2 className="text-4xl font-bold">{formatToman(amount)}</h2>
+        <h2 className="text-4xl font-bold">{formatToman(totalInventory)}</h2>
       </div>
 
       {/* حساب ها */}

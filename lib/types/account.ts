@@ -1,6 +1,13 @@
-export type GetUserAccountsParams = {
+export type GetUserAccountParams = {
   userId: number;
+  accountId?: number;
   isActive?: boolean;
+  select?: {
+    id?: boolean;
+    name?: boolean;
+    type?: boolean;
+    isActive?: boolean;
+  };
 };
 
 export type AccountInput = {

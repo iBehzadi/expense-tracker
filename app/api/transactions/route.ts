@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
+import { getUserAccount } from "@/lib/services/account.service";
 
 // GET /api/transactions
 export async function GET() {
@@ -170,10 +171,21 @@ export async function POST(request: Request) {
   try {
     // بررسی وجود حساب و دسته‌بندی
     const [account, category] = await Promise.all([
-      prisma.account.findFirst({
-        where: { id: accountId, userId },
-        select: { id: true, isActive: true },
+      
+      // prisma.account.findFirst({
+      //   where: { id: accountId, userId },
+      //   select: { id: true, isActive: true },
+      // }),
+
+      getUserAccount({
+        userId,
+        accountId,
+        select: {
+          id: true,
+          isActive: true,
+        },
       }),
+
       prisma.category.findFirst({
         where: { id: categoryId, userId },
         select: { id: true, type: true },
@@ -199,7 +211,7 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    
+
     const transaction = await prisma.transaction.create({
       data: {
         title: title.trim(),

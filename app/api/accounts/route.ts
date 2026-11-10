@@ -15,9 +15,8 @@ export async function GET() {
       { status: 401 },
     );
   }
-  const isActive = true;
 
-  const accounts = await getUserAccounts({ userId, isActive });
+  const accounts = await getUserAccounts({ userId, isActive: true });
 
   return NextResponse.json(
     accounts.map((a) => ({
@@ -73,7 +72,6 @@ export async function POST(request: Request) {
         initialBalance: body.initialBalance,
       },
     });
-
 
     return NextResponse.json(
       {
