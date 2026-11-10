@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
+import { updateUserAccount } from "@/lib/services/account.service";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -31,11 +32,7 @@ export async function PUT(request: Request, { params }: Props) {
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const allowedTypes = ["BANK", "CASH", "SAVINGS", "OTHER"];
 
-    if (
-      !name ||
-      name.length > 100 ||
-      !allowedTypes.includes(body.type)
-    ) {
+    if (!name || name.length > 100 || !allowedTypes.includes(body.type)) {
       return NextResponse.json(
         { message: "نام یا نوع حساب معتبر نیست" },
         { status: 400 },
@@ -44,34 +41,26 @@ export async function PUT(request: Request, { params }: Props) {
 
     const initialBalance = body.initialBalance;
 
-    if (
-      typeof initialBalance !== "string" ||
-      !/^\d+$/.test(initialBalance)
-    ) {
+    if (typeof initialBalance !== "string" || !/^\d+$/.test(initialBalance)) {
       return NextResponse.json(
         { message: "موجودی اولیه معتبر نیست" },
         { status: 400 },
       );
     }
-
-    const result = await prisma.account.updateMany({
-      where: {
-        id: accountId,
-        userId,
-        isActive: true,
-      },
-      data: {
-        name,
+    const isActive = true;
+    const result = await updateUserAccount({
+      id: accountId,
+      isActive,
+      userId,
+      input: {
+        name: body.name,
         type: body.type,
-        initialBalance: BigInt(initialBalance),
+        initialBalance: body.initialBalance,
       },
     });
 
     if (result.count === 0) {
-      return NextResponse.json(
-        { message: "حساب پیدا نشد" },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: "حساب پیدا نشد" }, { status: 404 });
     }
 
     const account = await prisma.account.findFirst({

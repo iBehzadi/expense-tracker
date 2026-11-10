@@ -39,7 +39,7 @@ export default function AccountCard({ account, balance }: AccountCardProps) {
     <>
       <Link
         href={`/accounts/${account.id}`}
-        className="flex items-center justify-between p-3 gap-2 shadow-xl border border-gray-300 my-4 bg-white rounded mx-6 "
+        className="flex items-center justify-between p-3 gap-2 shadow border border-gray-300 my-4 bg-white rounded mx-6 "
       >
         <div className="flex items-center justify-between gap-3">
           <span

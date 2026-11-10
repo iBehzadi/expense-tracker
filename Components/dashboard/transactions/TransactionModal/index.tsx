@@ -22,7 +22,7 @@ type account = {
   name: string;
   type: string;
 };
-type addTransactionModalProps = {
+type TransactionModalProps = {
   onShow?: boolean;
   onClose: () => void;
   transaction?: {
@@ -53,7 +53,7 @@ export default function TransactionModal({
   transaction,
   categories,
   accounts,
-}: addTransactionModalProps) {
+}: TransactionModalProps) {
   const [title, setTitle] = useState(transaction?.title);
   const [type, setType] = useState<TransactionType>("expense");
   const [amount, setAmount] = useState("");
@@ -65,7 +65,10 @@ export default function TransactionModal({
   const [accountId, setAccountId] = useState(
     transaction?.accountId.toString() || "",
   );
+
+  
   const router = useRouter();
+  
   useEffect(() => {
     if (transaction) {
       setType(transaction.category.type);

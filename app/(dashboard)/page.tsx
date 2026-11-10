@@ -3,8 +3,7 @@ import { prisma } from "../../lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
 import Link from "next/link";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
-import { GoArrowUpRight,GoArrowDownLeft } from "react-icons/go";
-
+import { GoArrowUpRight, GoArrowDownLeft } from "react-icons/go";
 
 export default async function DashboardPage() {
   const userId = await getCurrentUserId();
@@ -52,7 +51,7 @@ export default async function DashboardPage() {
     prisma.transaction.findMany({
       where: { userId },
       orderBy: { date: "desc" },
-      take: 7,
+      take: 5,
       include: {
         category: {
           select: {
@@ -204,7 +203,7 @@ export default async function DashboardPage() {
                           : "bg-rose-100 text-rose-600 dark:bg-rose-500/10"
                       }`}
                     >
-                      {isIncome ? <GoArrowUpRight/> : <GoArrowDownLeft />}
+                      {isIncome ? <GoArrowUpRight /> : <GoArrowDownLeft />}
                     </div>
 
                     <div className="min-w-0">
@@ -225,7 +224,6 @@ export default async function DashboardPage() {
                       isIncome ? "text-emerald-600" : "text-rose-600"
                     }`}
                   >
-                    
                     {formatToman(transaction.amount)}
                     {isIncome ? "+" : "-"}
                     <span className="mr-1 text-xs font-normal">تومان</span>

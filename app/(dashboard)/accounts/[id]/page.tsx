@@ -141,7 +141,7 @@ export default async function accountDetails({ params }: Props) {
             </div>
 
             {/* موجودی فعلی */}
-            <div className="mt-6 rounded-xl bg-gray-50 p-4 dark:bg-slate-800">
+            <div className="mt-6 rounded-xl bg-gray-100 p-4 dark:bg-slate-800">
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 موجودی فعلی
               </p>
@@ -157,8 +157,8 @@ export default async function accountDetails({ params }: Props) {
 
             {/* آمار درآمد و هزینه */}
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-gray-100 p-3 dark:border-slate-800">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="rounded-xl border bg-gray-100 border-gray-100 p-3 dark:border-slate-800">
+                <p className="text-sm text-gray-500 dark:text-gray-400 ">
                   مجموع درآمد
                 </p>
 
@@ -167,7 +167,7 @@ export default async function accountDetails({ params }: Props) {
                 </p>
               </div>
 
-              <div className="rounded-xl border border-gray-100 p-3 dark:border-slate-800">
+              <div className="rounded-xl border bg-gray-100 border-gray-100 p-3 dark:border-slate-800">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   مجموع هزینه
                 </p>

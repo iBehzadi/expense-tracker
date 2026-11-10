@@ -5,6 +5,7 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { redirect } from "next/navigation";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
 import AccountCard from "@/Components/dashboard/accounts/AccountCard";
+import { getUserAccounts } from "@/lib/services/account.service";
 
 export default async function accounts() {
   const userId = await getCurrentUserId();
@@ -14,9 +15,9 @@ export default async function accounts() {
   }
 
   //اتصال به دیتابیس و دریافت حساب ها و تراکنش ها
-  const [allAccounts, incomes, expenses] = await Promise.all([
-    prisma.account.findMany({
-      where: { userId },
+  const [Accounts, incomes, expenses] = await Promise.all([
+    getUserAccounts({
+      userId,
     }),
 
     prisma.transaction.findMany({
@@ -57,7 +58,7 @@ export default async function accounts() {
   }
 
   // تابع نمایش حساب ها
-  const accountCards = allAccounts.map((acc) => {
+  const accountCards = Accounts.map((acc) => {
     const income = incomeMap.get(acc.id) ?? BigInt(0);
     const expense = expenseMap.get(acc.id) ?? BigInt(0);
 
@@ -80,7 +81,7 @@ export default async function accounts() {
   });
 
   // اگر کاربر هنوز حسابی ایجاد نکرده باشد
-  if (allAccounts.length === 0) {
+  if (Accounts.length === 0) {
     return (
       <main className="mx-auto max-w-7xl p-4 py-10 md:p-8">
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
@@ -114,7 +115,7 @@ export default async function accounts() {
           <button
             type="button"
             disabled
-            className="min-w-0 max-w-full text-6xl disabled:bg-gray-200 disabled:text-gray-400 shadow-xl px-4 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
+            className="min-w-0 max-w-full text-6xl shadow disabled:bg-gray-200 disabled:text-gray-400 px-4 py-2 border focus:bg-gray-300 border-violet-300 rounded text-violet-400 bg-violet-100 hover:text-violet-500 hover:bg-violet-200 flex flex-col items-center"
           >
             <FaMoneyBillTransfer />
             <span className="text-sm text-black/80 text-center">
@@ -123,7 +124,7 @@ export default async function accounts() {
           </button>
 
           {/* افزودن حساب */}
-          <AccountManager classes="flex flex-col items-center rounded border border-green-300 bg-green-100 px-6 py-2 text-6xl text-green-400 shadow-xl hover:bg-green-200" />
+          <AccountManager classes="flex flex-col items-center shadow rounded border border-green-300 bg-green-100 px-6 py-2 text-6xl text-green-400  hover:bg-green-200" />
         </div>
       </div>
     </div>

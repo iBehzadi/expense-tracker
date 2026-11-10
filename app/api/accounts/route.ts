@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
+import {
+  createUserAccount,
+  getUserAccounts,
+} from "@/lib/services/account.service";
 
 // دریافت حساب‌های کاربر لاگین‌شده
 export async function GET() {
@@ -12,16 +15,9 @@ export async function GET() {
       { status: 401 },
     );
   }
+  const isActive = true;
 
-  const accounts = await prisma.account.findMany({
-    where: {
-      userId,
-      isActive: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const accounts = await getUserAccounts({ userId, isActive });
 
   return NextResponse.json(
     accounts.map((a) => ({
@@ -69,14 +65,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const account = await prisma.account.create({
-      data: {
-        name,
-        type: body.type ?? "BANK",
-        initialBalance: BigInt(initialBalance),
-        userId,
+    const account = await createUserAccount({
+      userId,
+      input: {
+        name: body.name,
+        type: body.type,
+        initialBalance: body.initialBalance,
       },
     });
+
 
     return NextResponse.json(
       {

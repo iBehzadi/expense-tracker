@@ -32,7 +32,7 @@ export default async function transactions() {
 
     prisma.category.findMany({
       where: {
-        userId: userId,
+       userId,
       },
       select: {
         id: true,
@@ -43,7 +43,7 @@ export default async function transactions() {
 
     prisma.account.findMany({
       where: {
-        userId: userId,
+        userId,
       },
       select: {
         id: true,
