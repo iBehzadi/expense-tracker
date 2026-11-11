@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "../../../../lib/prisma";
-import { createSession } from "../../../../lib/api/auth";
+import { createSession } from "../../../../lib/api/session";
 
 const registerSchema = z.object({
   name: z.string().trim().max(80).optional(),

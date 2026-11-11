@@ -1,5 +1,5 @@
 import TransactionItem from "@/Components/dashboard/transactions/TransactionItem";
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import { prisma } from "@/lib/prisma";
 import { formatDate, formatToman } from "@/utils/format";
 import { notFound, redirect } from "next/navigation";

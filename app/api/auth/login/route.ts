@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "../../../../lib/prisma";
-import { createSession } from "../../../../lib/api/auth";
+import { createSession } from "../../../../lib/api/session";
 
 //اعتبارسنجی
 const loginSchema = z.object({

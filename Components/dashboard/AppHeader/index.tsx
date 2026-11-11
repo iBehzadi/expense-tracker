@@ -1,40 +1,16 @@
-"use client";
-
-import { sayHello } from "@/utils/functions";
+import { getCurrentUserId } from "@/lib/api/session";
+import { getUserInfoService } from "@/lib/services/user.service";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { BiWallet,BiUserCircle } from "react-icons/bi";
+import { BiWallet, BiUserCircle } from "react-icons/bi";
 
-interface User {
-  id: number;
-  name: string | null;
-  email: string;
-}
+export default async function AppHeader() {
 
-export default function AppHeader() {
-  const [user, setUser] = useState<User | null>(null);
+  const userId = await getCurrentUserId();
 
-  useEffect(() => {
-    async function getUser() {
-      try {
-        const response = await fetch("/api/auth/me", {
-          cache: "no-store",
-        });
-
-        if (!response.ok) {
-          throw new Error("خطا در دریافت اطلاعات کاربر");
-        }
-
-        const data = await response.json();
-        
-        setUser(data.user);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    getUser();
-  }, []);
+  if (!userId) {
+    throw new Error("کاربر پیدا نشد!");
+  }
+  const user = await getUserInfoService(userId);
 
   return (
     <header className="sticky shrink-0 top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90">
@@ -64,12 +40,12 @@ export default function AppHeader() {
           className="flex items-center gap-2 rounded-xl border border-gray-200 p-2 transition hover:bg-gray-50 dark:border-slate-800 dark:hover:bg-slate-800 lg:order-3"
         >
           <div className="flex h-9 w-9 items-center justify-center text-2xl rounded-full bg-blue-100 font-bold text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
-            <BiUserCircle  />
+            <BiUserCircle />
           </div>
 
           <div className="hidden sm:block">
             <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">
-             {user?.name}
+              {user?.name}
             </p>
             <p className="mt-1 text-[10px] text-gray-500">تنظیمات حساب</p>
           </div>

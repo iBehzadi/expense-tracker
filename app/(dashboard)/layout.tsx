@@ -1,7 +1,7 @@
 import React from "react";
 import AppHeader from "@/Components/dashboard/AppHeader";
 import NavigationMenu from "@/Components/NavigationMenu";
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({

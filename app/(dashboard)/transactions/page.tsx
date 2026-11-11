@@ -1,5 +1,5 @@
 import NewTransactionBtn from "@/Components/dashboard/transactions/NewTransactionBtn";
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import TransactionItem from "@/Components/dashboard/transactions/TransactionItem";

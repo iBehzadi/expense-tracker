@@ -1,4 +1,4 @@
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import { prisma } from "@/lib/prisma";
 import { formatToman } from "@/utils/format";
 import { FaMoneyBillTransfer } from "react-icons/fa6";

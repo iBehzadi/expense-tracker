@@ -1,6 +1,6 @@
 import { formatDate, formatToman } from "@/utils/format";
 import { prisma } from "../../lib/prisma";
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import Link from "next/link";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
 import { GoArrowUpRight, GoArrowDownLeft } from "react-icons/go";

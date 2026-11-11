@@ -1,4 +1,4 @@
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 import { Prisma } from "@/app/generated/prisma/client";

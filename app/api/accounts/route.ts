@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import {
   createUserAccount,
   getUserAccounts,

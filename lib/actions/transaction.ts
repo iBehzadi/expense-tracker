@@ -1,6 +1,6 @@
 "use server";
 
-import { getCurrentUserId } from "@/lib/api/auth";
+import { getCurrentUserId } from "@/lib/api/session";
 import { createTransactionService } from "@/lib/services/transaction.service";
 import { updateTransactionService } from "@/lib/services/transaction.service";
 import { revalidatePath } from "next/cache";
