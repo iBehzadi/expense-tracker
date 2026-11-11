@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 import { getCurrentUserId } from "@/lib/api/auth";
-import { getUserAccount } from "@/lib/services/account.service";
+import { getAccountService } from "@/lib/services/account.service";
 
 // GET /api/transactions
 export async function GET() {
@@ -172,7 +172,7 @@ export async function POST(request: Request) {
     // بررسی وجود حساب و دسته‌بندی
     const [account, category] = await Promise.all([
       
-      getUserAccount({
+      getAccountService({
         userId,
         accountId,
         select: {

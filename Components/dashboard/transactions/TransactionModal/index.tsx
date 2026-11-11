@@ -2,10 +2,10 @@
 
 import DefButton from "@/Components/ui/button";
 import {
-  deleteTransaction,
-  setTransaction,
-  updateTransaction,
-} from "@/lib/api/transactions";
+  createTransactionAction,
+  deleteTransactionAction,
+  updateTransactionAction,
+} from "@/lib/actions/transaction";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
@@ -46,7 +46,6 @@ type TransactionModalProps = {
   accounts: account[];
 };
 
-
 export default function TransactionModal({
   onShow,
   onClose,
@@ -66,9 +65,8 @@ export default function TransactionModal({
     transaction?.accountId.toString() || "",
   );
 
-  
   const router = useRouter();
-  
+
   useEffect(() => {
     if (transaction) {
       setType(transaction.category.type);
@@ -99,7 +97,7 @@ export default function TransactionModal({
     const result = confirm("آیا از حذف این تراکنش مطمئنی؟");
 
     if (result) {
-      await deleteTransaction(id);
+      await deleteTransactionAction(id);
     } else {
       return;
     }
@@ -107,6 +105,7 @@ export default function TransactionModal({
     router.refresh();
     onClose();
   };
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -123,14 +122,13 @@ export default function TransactionModal({
     };
 
     if (transaction?.id === undefined) {
-      await setTransaction(payload);
+      await createTransactionAction(payload);
     } else {
-      await updateTransaction({
-        id: transaction.id,
-        transaction: payload,
+      await updateTransactionAction({
+        ...payload,
+        transactionId: transaction.id,
       });
     }
-
 
     router.refresh();
     onClose();

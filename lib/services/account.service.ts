@@ -7,7 +7,7 @@ import {
 } from "../types/account";
 
 //get user accounts
-export async function getUserAccounts({
+export async function getAccountsService({
   userId,
   isActive,
   select,
@@ -21,8 +21,9 @@ export async function getUserAccounts({
   });
 }
 
-// get user account
-export async function getUserAccount({
+
+// ============================  get user account   =========================
+export async function getAccountService({
   userId,
   accountId,
   isActive,
@@ -34,8 +35,8 @@ export async function getUserAccount({
   });
 }
 
-//create user account
-export async function createUserAccount({
+// ============================  create user account   =========================
+export async function createAccountService({
   userId,
   input,
 }: CreateAccountParams) {
@@ -52,7 +53,7 @@ export async function createUserAccount({
 }
 
 //update user account
-export async function updateUserAccount({
+export async function updateAccountService({
   id,
   userId,
   isActive,
@@ -77,4 +78,4 @@ export async function updateUserAccount({
 }
 
 // حذف حساب
-export async function deleteAccount() {}
+export async function deleteAccountService() {}

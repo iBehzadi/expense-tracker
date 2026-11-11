@@ -1,9 +1,13 @@
+import "server-only"
 import { prisma } from "../prisma";
-import { getUserAccount } from "./account.service";
-type UserTransactionParams = {
-  userId: number;
-  count?: number;
-};
+import {
+  CreateTransactionParams,
+  DeleteTransactionParams,
+  UpdateTransactionParams,
+  UserTransactionParams,
+} from "../types/transaction";
+import { getAccountService } from "./account.service";
+import { getCategoryService } from "./category.service";
 
 //دریافت تراکنش های کاربر
 export async function getTransactionsService({
@@ -25,32 +29,14 @@ export async function getTransactionsService({
   });
 }
 
-//دریافت تراکنش های ورودی
-
-
 
 //ایجاد تراکنش جدید
-type TransactionInput = {
-  title: string;
-  amount: string;
-  accountId: number;
-  categoryId: number;
-  description?: string;
-  date?: Date;
-};
-
-type CreateTransactionParams = {
-  userId: number;
-  data: TransactionInput;
-};
-
-
 export async function createTransactionService({
   userId,
   data,
 }: CreateTransactionParams) {
   // بررسی حساب
-  const account = await getUserAccount({
+  const account = await getAccountService({
     userId,
     accountId: data.accountId,
   });
@@ -64,15 +50,13 @@ export async function createTransactionService({
   }
 
   // بررسی دسته‌بندی
-  const category = await prisma.category.findFirst({
-    where: {
-      id: data.categoryId,
-      userId,
-    },
+  const category = await getCategoryService({
+    userId,
+    categoryId: data.categoryId,
   });
 
   if (!category) {
-    throw new Error("دسته‌بندی موردنظر معتبر نیست");
+    throw new Error("دسته‌بندی معتبر نیست");
   }
 
   // ایجاد تراکنش
@@ -100,6 +84,112 @@ export async function createTransactionService({
           type: true,
         },
       },
+    },
+  });
+}
+
+
+// ویرایش تراکنش
+export async function updateTransactionService({
+  userId,
+  transactionId,
+  data,
+}: UpdateTransactionParams) {
+  // بررسی وجود تراکنش و مالکیت آن
+  const transaction = await prisma.transaction.findFirst({
+    where: {
+      id: transactionId,
+      userId,
+    },
+  });
+
+  if (!transaction) {
+    throw new Error("تراکنش موردنظر پیدا نشد");
+  }
+
+  // بررسی حساب جدید
+  const account = await getAccountService({
+    userId,
+    accountId: data.accountId,
+  });
+
+  if (!account) {
+    throw new Error("حساب موردنظر معتبر نیست");
+  }
+
+  if (!account.isActive) {
+    throw new Error("حساب موردنظر فعال نیست");
+  }
+
+  // بررسی دسته‌بندی جدید
+  const category = await getCategoryService({
+    userId,
+    categoryId: data.categoryId,
+  });
+
+  if (!category) {
+    throw new Error("دسته‌بندی معتبر نیست");
+  }
+
+  // آپدیت تراکنش
+  return prisma.transaction.update({
+    where: {
+      id: transactionId,
+    },
+    data: {
+      accountId: data.accountId,
+      categoryId: data.categoryId,
+      title: data.title,
+      amount: BigInt(data.amount),
+      description: data.description?.trim() || null,
+      ...(data.date && { date: data.date }),
+    },
+    include: {
+      account: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+        },
+      },
+    },
+  });
+}
+
+
+
+
+
+// حذف تراکنش
+export async function deleteTransactionService({
+  userId,
+  transactionId,
+}: DeleteTransactionParams) {
+  // بررسی وجود تراکنش و مالکیت آن
+  const transaction = await prisma.transaction.findFirst({
+    where: {
+      id: transactionId,
+      userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!transaction) {
+    throw new Error("تراکنش موردنظر پیدا نشد");
+  }
+
+  // حذف تراکنش
+  return prisma.transaction.delete({
+    where: {
+      id: transactionId,
     },
   });
 }

@@ -5,9 +5,10 @@ import Link from "next/link";
 import TransactionItem from "@/Components/dashboard/transactions/TransactionItem";
 import { getTransactionsService } from "@/lib/services/transaction.service";
 import {
-  getUserAccount,
-  getUserAccounts,
+  getAccountService,
+  getAccountsService,
 } from "@/lib/services/account.service";
+import { getCategoriesService } from "@/lib/services/category.service";
 
 export default async function transactions() {
   const userId = await getCurrentUserId();
@@ -16,23 +17,12 @@ export default async function transactions() {
     throw new Error("کاربر شناسایی نشد");
   }
   // بررسی داشتن حساب
-  const hasAccount = await getUserAccount({ userId, select: { id: true } });
+  const hasAccount = await getAccountService({ userId, select: { id: true } });
 
-  const [result, cat, acc] = await Promise.all([
+  const [transactions, cats, accs] = await Promise.all([
     getTransactionsService({ userId }),
 
-    prisma.category.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-      },
-    }),
-
-    getUserAccounts({
+    getCategoriesService({
       userId,
       select: {
         id: true,
@@ -41,6 +31,14 @@ export default async function transactions() {
       },
     }),
 
+    getAccountsService({
+      userId,
+      select: {
+        id: true,
+        name: true,
+        type: true,
+      },
+    }),
   ]);
 
   // اگر کاربر هنوز حسابی ایجاد نکرده باشد
@@ -69,17 +67,17 @@ export default async function transactions() {
   return (
     <div className="mx-auto max-w-7xl space-y-4 p-4 md:p-8">
       <section className="overflow-hidden mb-18 rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-        {result.length > 0 ? (
+        {transactions.length > 0 ? (
           <ul className="divide-y divide-gray-100 dark:divide-slate-800">
-            {result.map((transaction) => {
+            {transactions.map((transaction) => {
               const isIncome = transaction.category?.type === "income";
               return (
                 <TransactionItem
                   isIncome={isIncome}
                   key={transaction.id}
                   transaction={transaction}
-                  categories={cat}
-                  accounts={acc}
+                  categories={cats}
+                  accounts={accs}
                 />
               );
             })}
@@ -94,7 +92,7 @@ export default async function transactions() {
           </div>
         )}
       </section>
-      <NewTransactionBtn categories={cat} accounts={acc} />
+      <NewTransactionBtn categories={cats} accounts={accs} />
     </div>
   );
 }

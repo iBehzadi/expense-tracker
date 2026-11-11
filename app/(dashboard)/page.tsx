@@ -4,8 +4,8 @@ import { getCurrentUserId } from "@/lib/api/auth";
 import Link from "next/link";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
 import { GoArrowUpRight, GoArrowDownLeft } from "react-icons/go";
-import { getUserAccount } from "@/lib/services/account.service";
-import { getUserTransactions } from "@/lib/services/transaction.service";
+import { getAccountService } from "@/lib/services/account.service";
+import { getTransactionsService } from "@/lib/services/transaction.service";
 
 export default async function DashboardPage() {
   //شناسایی و دریافت توکن کاربر
@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   }
 
   // اگر کاربر هنوز حسابی ایجاد نکرده باشد
-  const hasAccount = await getUserAccount({ userId });
+  const hasAccount = await getAccountService({ userId });
   if (!hasAccount) {
     return (
       <main className="mx-auto max-w-7xl p-4 py-10 md:p-8">
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
   const [recent, income, expense] = await Promise.all([
-    getUserTransactions({ userId, count: 5 }),
+    getTransactionsService({ userId, count: 5 }),
 
     prisma.transaction.aggregate({
       where: {

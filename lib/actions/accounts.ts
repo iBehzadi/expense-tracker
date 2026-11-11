@@ -3,8 +3,8 @@
 
 import { getCurrentUserId } from "@/lib/api/auth";
 import {
-  createUserAccount,
-  updateUserAccount,
+  createAccountService,
+  updateAccountService,
 } from "@/lib/services/account.service";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -33,7 +33,7 @@ export async function createAccountAction(input: unknown) {
   }
 
   try {
-    await createUserAccount({
+    await createAccountService({
       userId,
       input: validation.data,
     });
@@ -77,7 +77,7 @@ export async function updateAccountAction(
   }
 
   try {
-    const result = await updateUserAccount({
+    const result = await updateAccountService({
       id: accountId,
       userId,
       isActive: true,

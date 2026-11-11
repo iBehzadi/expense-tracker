@@ -9,8 +9,8 @@ import { MdOutlineSavings } from "react-icons/md";
 import Link from "next/link";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
 import {
-  getUserAccount,
-  getUserAccounts,
+  getAccountService,
+  getAccountsService,
 } from "@/lib/services/account.service";
 
 type Props = {
@@ -43,7 +43,7 @@ export default async function accountDetails({ params }: Props) {
   }
 
   const [account, transactions, cat, acc] = await Promise.all([
-    getUserAccount({ userId, accountId }),
+    getAccountService({ userId, accountId }),
 
     prisma.transaction.findMany({
       where: {
@@ -69,7 +69,7 @@ export default async function accountDetails({ params }: Props) {
       },
     }),
 
-    getUserAccounts({
+    getAccountsService({
       userId,
       select: {
         id: true,

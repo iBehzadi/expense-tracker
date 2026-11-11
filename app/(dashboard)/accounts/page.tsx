@@ -5,7 +5,7 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { redirect } from "next/navigation";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
 import AccountCard from "@/Components/dashboard/accounts/AccountCard";
-import { getUserAccounts } from "@/lib/services/account.service";
+import { getAccountsService } from "@/lib/services/account.service";
 
 export default async function accounts() {
   const userId = await getCurrentUserId();
@@ -16,7 +16,7 @@ export default async function accounts() {
 
   //اتصال به دیتابیس و دریافت حساب ها و تراکنش ها
   const [Accounts, incomes, expenses] = await Promise.all([
-    getUserAccounts({
+    getAccountsService({
       userId,
     }),
 

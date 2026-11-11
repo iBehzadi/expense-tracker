@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import DefButton from "@/Components/ui/button";
 import { IoCloseCircle } from "react-icons/io5";
 import { IoCardOutline, IoWalletOutline } from "react-icons/io5";
@@ -52,7 +51,6 @@ export default function AccountModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const router = useRouter();
 
   useEffect(() => {
     if (onShow) {
