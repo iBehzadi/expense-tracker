@@ -1,9 +1,9 @@
-import NewTransactionBtn from "../../../Components/dashboard/transactions/NewTransactionBtn";
+import NewTransactionBtn from "@/Components/dashboard/transactions/NewTransactionBtn";
 import { getCurrentUserId } from "@/lib/api/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import TransactionItem from "../../../Components/dashboard/transactions/TransactionItem";
-import { getUserTransactions } from "@/lib/services/transaction.service";
+import TransactionItem from "@/Components/dashboard/transactions/TransactionItem";
+import { getTransactionsService } from "@/lib/services/transaction.service";
 import {
   getUserAccount,
   getUserAccounts,
@@ -16,10 +16,10 @@ export default async function transactions() {
     throw new Error("کاربر شناسایی نشد");
   }
   // بررسی داشتن حساب
-  const hasAccount = getUserAccount({ userId, select: { id: true } });
+  const hasAccount = await getUserAccount({ userId, select: { id: true } });
 
   const [result, cat, acc] = await Promise.all([
-    getUserTransactions({ userId }),
+    getTransactionsService({ userId }),
 
     prisma.category.findMany({
       where: {

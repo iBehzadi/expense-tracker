@@ -172,11 +172,6 @@ export async function POST(request: Request) {
     // بررسی وجود حساب و دسته‌بندی
     const [account, category] = await Promise.all([
       
-      // prisma.account.findFirst({
-      //   where: { id: accountId, userId },
-      //   select: { id: true, isActive: true },
-      // }),
-
       getUserAccount({
         userId,
         accountId,

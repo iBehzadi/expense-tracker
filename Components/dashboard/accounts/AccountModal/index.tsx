@@ -7,6 +7,10 @@ import { IoCloseCircle } from "react-icons/io5";
 import { IoCardOutline, IoWalletOutline } from "react-icons/io5";
 import { BsCashCoin } from "react-icons/bs";
 import { MdOutlineSavings } from "react-icons/md";
+import {
+  createAccountAction,
+  updateAccountAction,
+} from "@/lib/actions/accounts";
 
 type AccountType = "BANK" | "CASH" | "SAVINGS" | "OTHER";
 
@@ -76,29 +80,21 @@ export default function AccountModal({
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        account ? `/api/accounts/${account.id}` : "/api/accounts",
-        {
-          method: account ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name.trim(),
-            type,
-            initialBalance: initialBalance || "0",
-          }),
-        },
-      );
+      const payload = {
+        name,
+        type,
+        initialBalance,
+      };
 
-      const data = await response.json();
+      const data = account
+        ? await updateAccountAction(account.id, payload)
+        : await createAccountAction(payload);
 
-      if (!response.ok) {
-        throw new Error(data.message || "خطا در ایجاد حساب");
+      if (!data.success) {
+        throw new Error(data.message || "خطا در ذخیره حساب");
       }
 
       onClose();
-      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "خطا در ثبت حساب");
     } finally {
