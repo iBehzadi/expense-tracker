@@ -1,11 +1,38 @@
 "use server";
 
 import { getCurrentUserId } from "@/lib/api/session";
-import { createTransactionService } from "@/lib/services/transaction.service";
+import {
+  createTransactionService,
+  getAccountTransactionsService,
+} from "@/lib/services/transaction.service";
 import { updateTransactionService } from "@/lib/services/transaction.service";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { deleteTransactionService } from "@/lib/services/transaction.service";
+import { getAccountService } from "../services/account.service";
+
+// ============================  get transaction by account action   =======================
+export async function getAccountTransactionsAction(accountId: number) {
+  const userId = await getCurrentUserId();
+  if (!userId) {
+    throw new Error("لطفاً وارد حساب کاربری شوید");
+  }
+
+  const account = await getAccountService({
+    userId,
+    accountId,
+    select: { id: true },
+  });
+  if (!account) {
+    throw new Error("حساب موردنظر یافت نشد");
+  }
+  const transactions = await getAccountTransactionsService({
+    userId,
+    accountId,
+  });
+
+  return transactions;
+}
 
 // ============================  create transaction action   =======================
 
@@ -64,7 +91,6 @@ const updateTransactionSchema = transactionSchema.extend({
 
 type UpdateTransactionInput = z.input<typeof updateTransactionSchema>;
 
-
 export async function updateTransactionAction(data: UpdateTransactionInput) {
   try {
     // احراز هویت
@@ -87,7 +113,7 @@ export async function updateTransactionAction(data: UpdateTransactionInput) {
     // آپدیت تراکنش
     const transaction = await updateTransactionService({
       userId,
-      transactionId : data.transactionId,
+      transactionId: data.transactionId,
       data: validation.data,
     });
 
@@ -107,9 +133,7 @@ export async function updateTransactionAction(data: UpdateTransactionInput) {
   }
 }
 
-
-
-
+// ============================ delete transaction action =======================
 // حذف تراکنش
 export async function deleteTransactionAction(transactionId: number) {
   try {
@@ -146,8 +170,7 @@ export async function deleteTransactionAction(transactionId: number) {
   } catch (error) {
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : "خطا در حذف تراکنش",
+      message: error instanceof Error ? error.message : "خطا در حذف تراکنش",
     };
   }
 }

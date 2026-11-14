@@ -8,6 +8,7 @@ export type TransactionInput = {
 };
 export type UserTransactionParams = {
   userId: number;
+  accountId?: number;
   count?: number;
 };
 

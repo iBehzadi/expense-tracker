@@ -9,7 +9,7 @@ import {
 import { getAccountService } from "./account.service";
 import { getCategoryService } from "./category.service";
 
-//دریافت تراکنش های کاربر
+//دریافت تراکنش های کلی کاربر
 export async function getTransactionsService({
   userId,
   count,
@@ -29,6 +29,24 @@ export async function getTransactionsService({
   });
 }
 
+
+export async function getAccountTransactionsService({
+  userId,
+  accountId
+}:UserTransactionParams) {
+   return prisma.transaction.findMany({
+      where: {
+        userId,
+        accountId,
+      },
+      include: {
+        category: true,
+      },
+      orderBy: {
+        date: "desc",
+      },
+    })
+}
 
 //ایجاد تراکنش جدید
 export async function createTransactionService({
@@ -161,9 +179,6 @@ export async function updateTransactionService({
     },
   });
 }
-
-
-
 
 
 // حذف تراکنش

@@ -12,6 +12,8 @@ import {
   getAccountService,
   getAccountsService,
 } from "@/lib/services/account.service";
+import { getCategoriesService } from "@/lib/services/category.service";
+import { getAccountTransactionsAction } from "@/lib/actions/transaction";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -45,29 +47,9 @@ export default async function accountDetails({ params }: Props) {
   const [account, transactions, cat, acc] = await Promise.all([
     getAccountService({ userId, accountId }),
 
-    prisma.transaction.findMany({
-      where: {
-        userId,
-        accountId,
-      },
-      include: {
-        category: true,
-      },
-      orderBy: {
-        date: "desc",
-      },
-    }),
+    getAccountTransactionsAction(userId),
 
-    prisma.category.findMany({
-      where: {
-        userId: userId,
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-      },
-    }),
+    getCategoriesService({ userId }),
 
     getAccountsService({
       userId,
@@ -77,7 +59,6 @@ export default async function accountDetails({ params }: Props) {
         type: true,
       },
     }),
-    
   ]);
 
   if (!account) {
