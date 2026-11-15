@@ -23,6 +23,8 @@ export async function getAccountTransactionsAction(accountId: number) {
     accountId,
     select: { id: true },
   });
+  console.log(account)
+
   if (!account) {
     throw new Error("حساب موردنظر یافت نشد");
   }
@@ -36,7 +38,7 @@ export async function getAccountTransactionsAction(accountId: number) {
 
 // ============================  create transaction action   =======================
 
-export const transactionSchema = z.object({
+ const transactionSchema = z.object({
   title: z.string().trim().min(1, "عنوان الزامی است").max(100),
   amount: z.string().regex(/^[1-9]\d*$/, "مبلغ معتبر نیست"),
   accountId: z.number().int().positive("حساب معتبر نیست"),

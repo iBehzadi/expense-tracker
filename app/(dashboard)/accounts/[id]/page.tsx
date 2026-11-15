@@ -47,7 +47,7 @@ export default async function accountDetails({ params }: Props) {
   const [account, transactions, cat, acc] = await Promise.all([
     getAccountService({ userId, accountId }),
 
-    getAccountTransactionsAction(userId),
+    getAccountTransactionsAction(accountId),
 
     getCategoriesService({ userId }),
 
