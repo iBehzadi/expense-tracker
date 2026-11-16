@@ -2,9 +2,8 @@ import { getCurrentUserId } from "@/lib/api/session";
 import { getUserInfoService } from "@/lib/services/user.service";
 import Link from "next/link";
 import { BiWallet, BiUserCircle } from "react-icons/bi";
-
+import JibiIcon from "@/Components/icons/JibiIcon";
 export default async function AppHeader() {
-
   const userId = await getCurrentUserId();
 
   if (!userId) {
@@ -20,16 +19,19 @@ export default async function AppHeader() {
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 lg:order-1">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
-            <BiWallet size={25} />
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl  bg-[#20C7B0] text-white shadow-lg shadow-blue-600/20">
+            {/* <BiWallet size={25} /> */}
+            <JibiIcon size={34} />
           </div>
 
           <div>
             <h1 className="text-base font-extrabold text-gray-900 dark:text-white">
-              مدیریت هزینه
+              Jibi
             </h1>
             <p className="text-[11px] text-gray-500 dark:text-gray-400">
-              Personal Finance
+              {/* Personal Finance */}
+              دخل و خرجت تحت کنترله!
+              {/* دخل و خرج، حساب‌شده */}
             </p>
           </div>
         </Link>

@@ -23,7 +23,7 @@ export async function getAccountTransactionsAction(accountId: number) {
     accountId,
     select: { id: true },
   });
-  console.log(account)
+
 
   if (!account) {
     throw new Error("حساب موردنظر یافت نشد");

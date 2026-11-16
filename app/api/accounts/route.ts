@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/api/session";
 import {
-  createUserAccount,
-  getUserAccounts,
+  createAccountService,
+  getAccountsService,
 } from "@/lib/services/account.service";
 
 // دریافت حساب‌های کاربر لاگین‌شده
@@ -16,7 +16,7 @@ export async function GET() {
     );
   }
 
-  const accounts = await getUserAccounts({ userId, isActive: true });
+  const accounts = await getAccountsService({ userId, isActive: true });
 
   return NextResponse.json(
     accounts.map((a) => ({
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const account = await createUserAccount({
+    const account = await createAccountService({
       userId,
       input: {
         name: body.name,

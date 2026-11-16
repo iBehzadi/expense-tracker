@@ -13,3 +13,5 @@ export async function getUserInfoService(userId: number) {
     },
   });
 }
+
+// logout 

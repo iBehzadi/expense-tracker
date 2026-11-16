@@ -96,13 +96,14 @@ model Budget {
   categoryId Int
   limit      BigInt
   userId     Int
-  month      String // نمونه: "2026-10"
+  month      String   // YYYY-MM
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([categoryId, month])
+  @@unique([userId, categoryId, month])
   @@index([userId, month])
 }

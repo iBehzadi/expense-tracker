@@ -1,6 +1,5 @@
 import TransactionItem from "@/Components/dashboard/transactions/TransactionItem";
 import { getCurrentUserId } from "@/lib/api/session";
-import { prisma } from "@/lib/prisma";
 import { formatDate, formatToman } from "@/utils/format";
 import { notFound, redirect } from "next/navigation";
 import { IoCardOutline, IoWalletOutline } from "react-icons/io5";
@@ -13,7 +12,7 @@ import {
   getAccountsService,
 } from "@/lib/services/account.service";
 import { getCategoriesService } from "@/lib/services/category.service";
-import { getAccountTransactionsAction } from "@/lib/actions/transaction";
+import { getAccountTransactionsService } from "@/lib/services/transaction.service";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -47,7 +46,7 @@ export default async function accountDetails({ params }: Props) {
   const [account, transactions, cat, acc] = await Promise.all([
     getAccountService({ userId, accountId }),
 
-    getAccountTransactionsAction(accountId),
+    getAccountTransactionsService({ userId, accountId }),
 
     getCategoriesService({ userId }),
 

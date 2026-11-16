@@ -15,6 +15,8 @@ const accountSchema = z.object({
   initialBalance: z.string().regex(/^\d+$/, "موجودی معتبر نیست"),
 });
 
+// دریافت حساب ها
+
 // ایجاد حساب
 export async function createAccountAction(input: unknown) {
   const userId = await getCurrentUserId();
