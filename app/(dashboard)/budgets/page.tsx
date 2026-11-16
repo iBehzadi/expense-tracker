@@ -66,14 +66,15 @@ export default async function BudgetsPage() {
     spending.map((item) => [item.categoryId, item._sum.amount ?? 0n]),
   );
 
+  // عملیات روی هر بودجه
   const budgetItems = budgets.map((item) => {
     //مقدار هزینه‌شده.
     const spent = spendingMap.get(item.categoryId) ?? 0n;
     //سقف بودجه
     const limit = item.limit;
-
+    //درصد
     const percent = limit > 0n ? Number((spent * 100n) / limit) : 0;
-
+    //باقیمانده
     const remaining = limit - spent;
 
     return {
@@ -92,7 +93,7 @@ export default async function BudgetsPage() {
   const totalSpent = budgetItems.reduce((sum, item) => sum + item.spent, 0n);
   //باقی مانده
   const totalRemaining = totalBudget - totalSpent;
-//درصد مصرف
+  //درصد مصرف
   const totalPercent =
     totalBudget > 0n ? Number((totalSpent * 100n) / totalBudget) : 0;
 

@@ -1,7 +1,7 @@
 import { getCurrentUserId } from "@/lib/api/session";
 import { getUserInfoService } from "@/lib/services/user.service";
 import Link from "next/link";
-import { BiWallet, BiUserCircle } from "react-icons/bi";
+import {  BiUserCircle } from "react-icons/bi";
 import JibiIcon from "@/Components/icons/JibiIcon";
 export default async function AppHeader() {
   const userId = await getCurrentUserId();

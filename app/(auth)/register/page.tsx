@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import JibiIcon from "@/Components/icons/JibiIcon";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -55,14 +56,13 @@ export default function RegisterPage() {
         });
 
         const data = await response.json();
-        console.log(data);
+
         if (!response.ok) {
           setError(data.message || "ثبت‌نام ناموفق بود");
           return;
         }
 
         setSuccess("ثبت‌نام با موفقیت انجام شد");
-
         router.push("/login");
         router.refresh();
       } catch {
@@ -73,122 +73,190 @@ export default function RegisterPage() {
     },
   });
 
+  const inputClass = (field: keyof typeof formik.values) =>
+    `w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition
+    placeholder:text-gray-400
+    focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10
+    dark:border-gray-700 dark:bg-[#151e30] dark:text-white
+    dark:placeholder:text-gray-500 dark:focus:border-blue-500 dark:focus:bg-[#151e30]
+    ${
+      formik.touched[field] && formik.errors[field]
+        ? "border-red-500 focus:border-red-500 focus:ring-red-500/10"
+        : ""
+    }`;
+
+  const labelClass =
+    "mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300";
+
   return (
-    <main className="mx-auto mt-12 w-full max-w-md px-4">
-      <h1 className="mb-2 text-2xl font-bold">ساخت حساب کاربری</h1>
+    <main
+      dir="rtl"
+      className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10 dark:bg-[#0b1120]"
+    >
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="mb-7 text-center">
+          {/* <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-bold text-white shadow-lg shadow-blue-600/20">
+            $
+          </div> */}
 
-      <p className="mb-6 text-sm text-gray-500">
-        برای مدیریت درآمد و هزینه‌هات ثبت‌نام کن.
-      </p>
+          <div className="flex mx-auto my-4 h-14 w-14 items-center justify-center rounded-2xl  bg-[#20C7B0] text-white shadow-lg shadow-blue-600/20">
+            <JibiIcon size={34} />
+          </div>
 
-      <form onSubmit={formik.handleSubmit} className="space-y-5">
-        <div>
-          <label htmlFor="name" className="mb-2 block">
-            نام و نام خانوادگی
-          </label>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            ساخت حساب کاربری
+          </h1>
 
-          <input
-            id="name"
-            type="text"
-            autoComplete="name"
-            {...formik.getFieldProps("name")}
-            className="w-full rounded-lg border p-3"
-            placeholder="نام شما"
-          />
-
-          {formik.touched.name && formik.errors.name && (
-            <p className="mt-1 text-sm text-red-500">{formik.errors.name}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="email" className="mb-2 block">
-            ایمیل
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            {...formik.getFieldProps("email")}
-            className="w-full rounded-lg border p-3"
-            placeholder="example@gmail.com"
-          />
-
-          {formik.touched.email && formik.errors.email && (
-            <p className="mt-1 text-sm text-red-500">{formik.errors.email}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="password" className="mb-2 block">
-            رمز عبور
-          </label>
-
-          <input
-            id="password"
-            type="password"
-            autoComplete="new-password"
-            {...formik.getFieldProps("password")}
-            className="w-full rounded-lg border p-3"
-            placeholder="حداقل ۸ کاراکتر"
-          />
-
-          {formik.touched.password && formik.errors.password && (
-            <p className="mt-1 text-sm text-red-500">
-              {formik.errors.password}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="confirmPassword" className="mb-2 block">
-            تکرار رمز عبور
-          </label>
-
-          <input
-            id="confirmPassword"
-            type="password"
-            autoComplete="new-password"
-            {...formik.getFieldProps("confirmPassword")}
-            className="w-full rounded-lg border p-3"
-            placeholder="رمز عبور را تکرار کن"
-          />
-
-          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-500">
-              {formik.errors.confirmPassword}
-            </p>
-          )}
-        </div>
-
-        {error && (
-          <p role="alert" className="text-sm text-red-500">
-            {error}
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            برای مدیریت هوشمند درآمد و هزینه‌هات ثبت‌نام کن.
           </p>
-        )}
+        </div>
 
-        {success && <p className="text-sm text-green-600">{success}</p>}
+        {/* Form Card */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8 dark:border-gray-800 dark:bg-[#111a2b]">
+          <form onSubmit={formik.handleSubmit} className="space-y-5">
+            {/* Name */}
+            <div>
+              <label htmlFor="name" className={labelClass}>
+                نام و نام خانوادگی
+              </label>
 
-        <button
-          type="submit"
-          disabled={formik.isSubmitting}
-          className="w-full rounded-lg bg-blue-600 p-3 text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          {formik.isSubmitting ? "در حال ثبت‌نام..." : "ثبت‌نام"}
-        </button>
+              <input
+                id="name"
+                type="text"
+                autoComplete="name"
+                {...formik.getFieldProps("name")}
+                className={inputClass("name")}
+                placeholder="نام خود را وارد کن"
+              />
 
-        <p className="text-center text-sm text-gray-500">
-          قبلاً ثبت‌نام کردی؟{" "}
-          <button
-            type="button"
-            onClick={() => router.push("/login")}
-            className="text-blue-600 hover:underline"
-          >
-            وارد شو
-          </button>
+              {formik.touched.name && formik.errors.name && (
+                <p className="mt-2 text-xs text-red-500">
+                  {formik.errors.name}
+                </p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className={labelClass}>
+                ایمیل
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                {...formik.getFieldProps("email")}
+                className={inputClass("email")}
+                placeholder="example@gmail.com"
+                dir="ltr"
+              />
+
+              {formik.touched.email && formik.errors.email && (
+                <p className="mt-2 text-xs text-red-500">
+                  {formik.errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className={labelClass}>
+                رمز عبور
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                autoComplete="new-password"
+                {...formik.getFieldProps("password")}
+                className={inputClass("password")}
+                placeholder="حداقل ۸ کاراکتر"
+              />
+
+              {formik.touched.password && formik.errors.password && (
+                <p className="mt-2 text-xs text-red-500">
+                  {formik.errors.password}
+                </p>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label htmlFor="confirmPassword" className={labelClass}>
+                تکرار رمز عبور
+              </label>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                {...formik.getFieldProps("confirmPassword")}
+                className={inputClass("confirmPassword")}
+                placeholder="رمز عبور را مجدداً وارد کن"
+              />
+
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <p className="mt-2 text-xs text-red-500">
+                    {formik.errors.confirmPassword}
+                  </p>
+                )}
+            </div>
+
+            {/* Messages */}
+            {error && (
+              <div
+                role="alert"
+                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-900/50 dark:bg-red-500/10 dark:text-red-400"
+              >
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600 dark:border-green-900/50 dark:bg-green-500/10 dark:text-green-400">
+                {success}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={formik.isSubmitting}
+              className="flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {formik.isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  در حال ثبت‌نام...
+                </span>
+              ) : (
+                "ایجاد حساب کاربری"
+              )}
+            </button>
+          </form>
+
+          <div className="mt-6 border-t border-gray-100 pt-5 text-center dark:border-gray-800">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              قبلاً حساب کاربری ساختی؟
+              <button
+                type="button"
+                onClick={() => router.push("/login")}
+                className="mr-1.5 font-semibold cursor-pointer text-blue-600 transition hover:text-blue-700 dark:text-blue-400"
+              >
+                وارد شو
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-gray-400 dark:text-gray-600">
+          مدیریت بهتر پول، شروع یک زندگی مالی بهتر
         </p>
-      </form>
+      </div>
     </main>
   );
 }

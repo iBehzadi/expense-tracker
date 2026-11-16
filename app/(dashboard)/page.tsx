@@ -104,7 +104,7 @@ export default async function DashboardPage() {
             </span>
           </div>
 
-          <p className="text-2xl font-bold text-emerald-600">
+          <p className="text-xl md:text-2xl font-bold text-emerald-600">
             {formatToman(totalIncome)}
             <span className="mr-2 text-sm font-normal">تومان</span>
           </p>
@@ -122,14 +122,14 @@ export default async function DashboardPage() {
             </span>
           </div>
 
-          <p className="text-2xl font-bold text-rose-600">
+          <p className="text-xl md:text-2xl font-bold text-rose-600">
             {formatToman(totalExpense)}
             <span className="mr-2 text-sm font-normal">تومان</span>
           </p>
         </div>
 
         {/* Balance */}
-        <div className="col-span-2 rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <div className="col-span-2 xl:col-span-1 rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-5 flex items-center justify-between">
             <span className="text-sm text-gray-500 dark:text-gray-400">
               مانده خالص این ماه
