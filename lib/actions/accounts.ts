@@ -6,8 +6,8 @@ import {
   createAccountService,
   updateAccountService,
 } from "@/lib/services/account.service";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { revalidateApp } from "../revalidate";
 
 const accountSchema = z.object({
   name: z.string().trim().min(1, "نام حساب الزامی است").max(100),
@@ -40,8 +40,8 @@ export async function createAccountAction(input: unknown) {
       input: validation.data,
     });
 
-    revalidatePath("/accounts");
-    revalidatePath("/");
+    // بروزرسانی صفحات
+    revalidateApp();
 
     return { success: true };
   } catch (error) {
@@ -90,9 +90,7 @@ export async function updateAccountAction(
       return { success: false, message: "حساب پیدا نشد" };
     }
 
-    revalidatePath("/accounts");
-    revalidatePath("/");
-    revalidatePath("/transactions");
+    revalidateApp();
 
     return { success: true };
   } catch (error) {

@@ -6,6 +6,7 @@ import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
 import { GoArrowUpRight, GoArrowDownLeft } from "react-icons/go";
 import { getAccountService } from "@/lib/services/account.service";
 import { getTransactionsService } from "@/lib/services/transaction.service";
+import AccountManager from "@/Components/dashboard/accounts/AccountManager";
 
 export default async function DashboardPage() {
   //شناسایی و دریافت توکن کاربر
@@ -19,7 +20,7 @@ export default async function DashboardPage() {
   if (!hasAccount) {
     return (
       <main className="mx-auto max-w-7xl p-4 py-10 md:p-8">
-        <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
+        <div className="rounded-2xl flex flex-col border border-dashed border-gray-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
           <div className="mb-4 text-4xl">💳</div>
 
           <h1 className="mb-2 text-xl font-bold">هنوز حسابی ایجاد نکردی!</h1>
@@ -28,12 +29,8 @@ export default async function DashboardPage() {
             برای شروع مدیریت درآمد و هزینه‌ها، ابتدا حساب مالی خودت رو ایجاد کن.
           </p>
 
-          <Link
-            href="/accounts"
-            className="inline-flex rounded-xl bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
-          >
-            ایجاد حساب جدید
-          </Link>
+          {/* افزودن حساب */}
+          <AccountManager classes="flex flex-col items-center shadow rounded border border-green-300 bg-green-100 px-6 py-2 text-6xl text-green-400  hover:bg-green-200" />
         </div>
       </main>
     );

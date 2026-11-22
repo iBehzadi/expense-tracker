@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { deleteTransactionService } from "@/lib/services/transaction.service";
 import { getAccountService } from "../services/account.service";
+import { revalidateApp } from "../revalidate";
 
 // ============================  get transaction by account action   =======================
 export async function getAccountTransactionsAction(accountId: number) {
@@ -24,7 +25,6 @@ export async function getAccountTransactionsAction(accountId: number) {
     select: { id: true },
   });
 
-
   if (!account) {
     throw new Error("حساب موردنظر یافت نشد");
   }
@@ -38,13 +38,18 @@ export async function getAccountTransactionsAction(accountId: number) {
 
 // ============================  create transaction action   =======================
 
- const transactionSchema = z.object({
+const transactionSchema = z.object({
   title: z.string().trim().min(1, "عنوان الزامی است").max(100),
   amount: z.string().regex(/^[1-9]\d*$/, "مبلغ معتبر نیست"),
   accountId: z.number().int().positive("حساب معتبر نیست"),
   categoryId: z.number().int().positive("دسته‌بندی معتبر نیست"),
   description: z.string().trim().max(500).optional(),
-  date: z.coerce.date().optional(),
+  // date: z.coerce.date().optional(),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .transform((v) => new Date(`${v}T12:00:00.000Z`))
+    .optional(),
 });
 
 export type TransactionInput = z.input<typeof transactionSchema>;
@@ -72,6 +77,9 @@ export async function createTransactionAction(data: TransactionInput) {
       userId,
       data: validation.data,
     });
+
+    // بروزرسانی صفحات
+    revalidateApp();
 
     return {
       success: true,
@@ -120,8 +128,7 @@ export async function updateTransactionAction(data: UpdateTransactionInput) {
     });
 
     // بروزرسانی صفحات
-    revalidatePath("/dashboard");
-    revalidatePath("/transactions");
+    revalidateApp();
 
     return {
       success: true,
@@ -163,8 +170,7 @@ export async function deleteTransactionAction(transactionId: number) {
     });
 
     // بروزرسانی صفحات
-    revalidatePath("/dashboard");
-    revalidatePath("/transactions");
+    revalidateApp();
 
     return {
       success: true,

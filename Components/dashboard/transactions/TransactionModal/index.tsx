@@ -63,15 +63,14 @@ export default function TransactionModal({
     transaction?.description ?? "",
   );
 
-  let localDate;
-  if (transaction) {
-    const d = new Date(transaction.date);
-    localDate = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-  }
+
+  const localDate = transaction?.date.toISOString().slice(0, 10);
 
   const [date, setDate] = useState(
-    localDate?.toISOString().slice(0, 10) ||
-      new Date().toLocaleDateString("en-US"),
+    localDate ||
+      new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tehran" }).format(
+        new Date(),
+      ),
   );
   const [categoryId, setCategoryId] = useState(
     transaction?.categoryId.toString() || "",
