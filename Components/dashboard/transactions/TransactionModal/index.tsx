@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { notify } from "@/utils/notify";
 
 type TransactionType = "expense" | "income";
 type Category = {
@@ -54,10 +55,24 @@ export default function TransactionModal({
   accounts,
 }: TransactionModalProps) {
   const [title, setTitle] = useState(transaction?.title);
-  const [type, setType] = useState<TransactionType>("expense");
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+  const [type, setType] = useState<TransactionType>(
+    transaction?.category.type || "expense",
+  );
+  const [amount, setAmount] = useState(transaction?.amount.toString() || "");
+  const [description, setDescription] = useState(
+    transaction?.description ?? "",
+  );
+
+  let localDate;
+  if (transaction) {
+    const d = new Date(transaction.date);
+    localDate = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+  }
+
+  const [date, setDate] = useState(
+    localDate?.toISOString().slice(0, 10) ||
+      new Date().toLocaleDateString("en-US"),
+  );
   const [categoryId, setCategoryId] = useState(
     transaction?.categoryId.toString() || "",
   );
@@ -66,25 +81,6 @@ export default function TransactionModal({
   );
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (transaction) {
-      setType(transaction.category.type);
-      setAmount(transaction.amount.toString());
-      setDescription(transaction.description ?? "");
-
-      const d = new Date(transaction.date);
-      const localDate = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-
-      setDate(localDate.toISOString().slice(0, 10));
-    } else {
-      setType("expense");
-      setAmount("");
-      setDescription("");
-      setDate(new Date().toLocaleDateString("en-US"));
-    }
-  }, [transaction, onShow]);
-
   const handleType = (t: TransactionType) => {
     setType(t);
     setCategoryId("");
@@ -94,10 +90,15 @@ export default function TransactionModal({
     const id = transaction?.id;
     if (!id) return;
 
-    const result = confirm("آیا از حذف این تراکنش مطمئنی؟");
+    const confirmation = confirm("آیا از حذف این تراکنش مطمئنی؟");
 
-    if (result) {
-      await deleteTransactionAction(id);
+    if (confirmation) {
+      const result = await deleteTransactionAction(id);
+      if (!result.success) {
+        setError(result.message ?? null);
+        notify("error", error ?? "خطایی رخ داده است.");
+        return;
+      }
     } else {
       return;
     }
@@ -105,10 +106,15 @@ export default function TransactionModal({
     router.refresh();
     onClose();
   };
-  
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (loading) return;
+    setLoading(true);
+    setError(null);
     if (!title?.trim()) return;
 
     const payload = {
@@ -121,17 +127,22 @@ export default function TransactionModal({
       date,
     };
 
-    if (transaction?.id === undefined) {
-      await createTransactionAction(payload);
-    } else {
-      await updateTransactionAction({
-        ...payload,
-        transactionId: transaction.id,
-      });
-    }
+    const result = transaction
+      ? await updateTransactionAction({
+          ...payload,
+          transactionId: transaction.id,
+        })
+      : await createTransactionAction(payload);
 
-    router.refresh();
+    setLoading(false);
+    if (!result.success) {
+      setError(result.message ?? null);
+      notify("error", error ?? "خطایی رخ داده است.");
+      return;
+    }
+    notify("success", "تراکنش با موفقیت به‌روزرسانی شد.");
     onClose();
+    router.refresh();
   };
 
   return (
@@ -313,6 +324,7 @@ export default function TransactionModal({
         {/* Footer */}
         <div className="shrink-0 border-t mb-12 flex items-center justify-between gap-4 border-gray-100 px-5 dark:border-slate-800">
           <DefButton
+            disabled={loading}
             title={transaction ? "ذخیره تغییرات" : "ثبت تراکنش"}
             color="green"
             type="submit"

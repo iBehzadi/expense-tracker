@@ -4,7 +4,7 @@ import "@fontsource/vazirmatn/500.css";
 import "@fontsource/vazirmatn/600.css";
 import "@fontsource/vazirmatn/700.css";
 import "./globals.css";
-
+import { Toaster } from "react-hot-toast";
 export const metadata: Metadata = {
   title: " مدیریت هزینه",
   description: "مدیریت درآمد، هزینه و بودجه شخصی",
@@ -13,10 +13,14 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-
   return (
     <html lang="fa" dir="rtl">
-      <body>{children}</body>
+      <body>
+        <>
+          {children}
+          <Toaster />
+        </>
+      </body>
     </html>
   );
 }
