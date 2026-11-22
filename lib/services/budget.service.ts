@@ -60,3 +60,81 @@ export async function getBudgetSpendingService({
     },
   });
 }
+
+
+// ایجاد بودجه
+export async function createBudgetService({
+  userId,
+  categoryId,
+  limit,
+  month,
+}: {
+  userId: number;
+  categoryId: number;
+  limit: bigint;
+  month: string;
+}) {
+  // بررسی مالکیت و نوع دسته‌بندی
+  const category = await prisma.category.findFirst({
+    where: {
+      id: categoryId,
+      userId,
+      type: "expense",
+    },
+    select: { id: true },
+  });
+
+  if (!category) {
+    throw new Error("INVALID_CATEGORY");
+  }
+
+  return prisma.budget.create({
+    data: {
+      userId,
+      categoryId,
+      limit,
+      month,
+    },
+  });
+}
+
+// ویرایش سقف بودجه
+export async function updateBudgetService({
+  userId,
+  budgetId,
+  limit,
+}: {
+  userId: number;
+  budgetId: number;
+  limit: bigint;
+}) {
+  const result = await prisma.budget.updateMany({
+    where: {
+      id: budgetId,
+      userId,
+    },
+    data: {
+      limit,
+    },
+  });
+
+  return result.count > 0;
+}
+
+// حذف بودجه
+export async function deleteBudgetService({
+  userId,
+  budgetId,
+}: {
+  userId: number;
+  budgetId: number;
+}) {
+  const result = await prisma.budget.deleteMany({
+    where: {
+      id: budgetId,
+      userId,
+    },
+  });
+
+  return result.count > 0;
+}
