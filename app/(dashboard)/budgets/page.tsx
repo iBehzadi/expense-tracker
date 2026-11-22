@@ -9,17 +9,17 @@ import {
   FiHeart,
   FiCoffee,
   FiMoreHorizontal,
-  FiEdit2,
   FiTrash2,
   FiTarget,
 } from "react-icons/fi";
-
+import BudgetManager from "@/Components/dashboard/budgets/BudgetManager";
 import { formatToman } from "@/utils/format";
 import { getCurrentUserId } from "@/lib/api/session";
 import {
   getBudgetsService,
   getBudgetSpendingService,
 } from "@/lib/services/budget.service";
+import { getCategoriesService } from "@/lib/services/category.service";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   خوراک: <FiShoppingBag />,
@@ -52,6 +52,12 @@ export default async function BudgetsPage() {
   const budgets = await getBudgetsService({
     userId,
     month,
+  });
+
+  // دریافت دسته بندی ها
+  const categories = await getCategoriesService({
+    userId,
+    select: { id: true, name: true, type: true },
   });
 
   //محاسبه هزینه‌ها بر اساس دسته بندی
@@ -101,7 +107,6 @@ export default async function BudgetsPage() {
     month: "long",
     year: "numeric",
   }).format(now);
-
   return (
     <main className="mx-auto max-w-7xl space-y-5 p-4 md:p-8">
       {/* Header */}
@@ -115,13 +120,7 @@ export default async function BudgetsPage() {
         </div>
 
         {/* باتن ایجاد بودجه */}
-        <Link
-          href="/budgets/new"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
-        >
-          <FiPlus size={18} />
-          ایجاد بودجه
-        </Link>
+        <BudgetManager categories={categories.filter((cat) => cat.type === "expense")} />
       </header>
 
       {/* Current Month */}
@@ -240,21 +239,15 @@ export default async function BudgetsPage() {
                           : `${item.percent.toLocaleString("fa-IR")}٪`}
                       </span>
 
-                      <button
-                        type="button"
-                        aria-label="ویرایش بودجه"
-                        className="text-gray-400 transition hover:text-blue-600"
-                      >
-                        <FiEdit2 />
-                      </button>
-
-                      <button
-                        type="button"
-                        aria-label="حذف بودجه"
-                        className="text-gray-400 transition hover:text-rose-600"
-                      >
-                        <FiTrash2 />
-                      </button>
+                      <BudgetManager
+                        categories={budgets.map((item) => item.category)}
+                        initialData={{
+                          id: item.id,
+                          categoryId: item.categoryId,
+                          limit: Number(item.limit),
+                          month: item.month,
+                        }}
+                      />
                     </div>
                   </div>
 

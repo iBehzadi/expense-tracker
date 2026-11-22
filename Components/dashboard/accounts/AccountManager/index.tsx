@@ -30,7 +30,7 @@ export default function AccountManager({
         onClick={() => setOnShow(true)}
         className={classes}
       >
-        {account ? <FiEdit2 /> : <IoMdAddCircle />}
+        {account ? <FiEdit2  /> : <IoMdAddCircle />}
 
         <span className={account ? "text-sm" : "text-sm text-black/80"}>
           {account ? "ویرایش حساب" : "افزودن حساب"}
