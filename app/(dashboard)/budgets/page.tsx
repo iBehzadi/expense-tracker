@@ -9,7 +9,6 @@ import {
   FiHeart,
   FiCoffee,
   FiMoreHorizontal,
-  FiTrash2,
   FiTarget,
 } from "react-icons/fi";
 import BudgetManager from "@/Components/dashboard/budgets/BudgetManager";

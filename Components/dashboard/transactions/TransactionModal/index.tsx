@@ -7,7 +7,7 @@ import {
   updateTransactionAction,
 } from "@/lib/actions/transaction";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { notify } from "@/utils/notify";

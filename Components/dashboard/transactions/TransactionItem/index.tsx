@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { GoArrowDownLeft, GoArrowUpRight } from "react-icons/go";
 import TransactionModal from "../TransactionModal";
 type account = {

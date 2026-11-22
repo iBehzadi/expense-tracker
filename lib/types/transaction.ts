@@ -28,3 +28,8 @@ export type DeleteTransactionParams = {
   userId: number;
   transactionId: number;
 };
+
+export type GetTransactionsByTypeParams = {
+  userId: number;
+  type: "income" | "expense";
+};

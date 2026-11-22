@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import DefButton from "@/Components/ui/button";
 import { IoCloseCircle } from "react-icons/io5";
 import { IoCardOutline, IoWalletOutline } from "react-icons/io5";
@@ -45,21 +45,13 @@ export default function AccountModal({
   onClose,
   account = null,
 }: AddAccountModalProps) {
-  const [name, setName] = useState("");
-  const [type, setType] = useState<AccountType>("BANK");
-  const [initialBalance, setInitialBalance] = useState("");
+  const [name, setName] = useState(account?.name ?? "");
+  const [type, setType] = useState<AccountType>(account?.type ?? "BANK");
+  const [initialBalance, setInitialBalance] = useState(account?.initialBalance ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
 
-  useEffect(() => {
-    if (onShow) {
-      setName(account?.name ?? "");
-      setType(account?.type ?? "BANK");
-      setInitialBalance(account?.initialBalance ?? "");
-      setError("");
-    }
-  }, [onShow, account]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

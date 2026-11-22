@@ -1,11 +1,11 @@
 import { getCurrentUserId } from "@/lib/api/session";
-import { prisma } from "@/lib/prisma";
 import { formatToman } from "@/utils/format";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { redirect } from "next/navigation";
 import AccountManager from "@/Components/dashboard/accounts/AccountManager";
 import AccountCard from "@/Components/dashboard/accounts/AccountCard";
 import { getAccountsService } from "@/lib/services/account.service";
+import { getTransactionsByTypeService } from "@/lib/services/transaction.service";
 
 export default async function accounts() {
   const userId = await getCurrentUserId();
@@ -20,26 +20,14 @@ export default async function accounts() {
       userId,
     }),
 
-    prisma.transaction.findMany({
-      where: {
-        userId,
-        category: { type: "income" },
-      },
-      select: {
-        accountId: true,
-        amount: true,
-      },
+    getTransactionsByTypeService({
+      userId,
+      type: "income",
     }),
 
-    prisma.transaction.findMany({
-      where: {
-        userId,
-        category: { type: "expense" },
-      },
-      select: {
-        accountId: true,
-        amount: true,
-      },
+    getTransactionsByTypeService({
+      userId,
+      type: "expense",
     }),
   ]);
 
@@ -94,7 +82,6 @@ export default async function accounts() {
           </p>
           {/* افزودن حساب */}
           <AccountManager classes="flex flex-col items-center shadow rounded border border-green-300 bg-green-100 px-6 py-2 text-6xl text-green-400  hover:bg-green-200" />
-          
         </div>
       </main>
     );
@@ -128,7 +115,6 @@ export default async function accounts() {
 
           {/* افزودن حساب */}
           <AccountManager classes="flex flex-col items-center shadow rounded border border-green-300 bg-green-100 px-6 py-2 text-6xl text-green-400  hover:bg-green-200" />
-
         </div>
       </div>
     </div>

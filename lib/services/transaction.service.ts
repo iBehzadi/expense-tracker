@@ -3,6 +3,7 @@ import { prisma } from "../prisma";
 import {
   CreateTransactionParams,
   DeleteTransactionParams,
+  GetTransactionsByTypeParams,
   UpdateTransactionParams,
   UserTransactionParams,
 } from "../types/transaction";
@@ -205,6 +206,25 @@ export async function deleteTransactionService({
   return prisma.transaction.delete({
     where: {
       id: transactionId,
+    },
+  });
+}
+
+
+
+
+export async function getTransactionsByTypeService({
+  userId,
+  type,
+}: GetTransactionsByTypeParams) {
+  return prisma.transaction.findMany({
+    where: {
+      userId,
+      category: { type },
+    },
+    select: {
+      accountId: true,
+      amount: true,
     },
   });
 }
